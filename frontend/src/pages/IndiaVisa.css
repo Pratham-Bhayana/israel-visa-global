@@ -611,6 +611,27 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+  .india-hero {
+    min-height: 90vh;
+    padding: 80px 16px 40px;
+  }
+
+  .india-hero-video-container {
+    top: 90px;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    border-radius: 16px;
+  }
+
+  .india-hero-video {
+    border-radius: 16px;
+  }
+
+  .india-hero-content {
+    padding: 0 1rem 2rem;
+  }
+
   .india-hero-title {
     font-size: 2.5rem;
   }
@@ -658,6 +679,10 @@
 
   .cta-content p {
     font-size: 1.1rem;
+  }
+
+  .india-visa-page section {
+    padding: 3rem 16px;
   }
 }
 

@@ -1,7 +1,10 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /admin/*
 Allow: /
+
+Sitemap: https://israel-visa-global.netlify.app/sitemap.xml
 
 # AI Crawlers
 User-agent: GPTBot
