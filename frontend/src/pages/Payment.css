@@ -1,0 +1,945 @@
+.payment-page {
+  min-height: calc(100vh - 80px);
+  padding: 6rem 1.5rem 3rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.payment-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.payment-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.payment-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0 0 0.5rem 0;
+}
+
+.payment-header p {
+  font-size: 1.1rem;
+  color: var(--gray-text);
+  font-weight: 600;
+}
+
+.payment-content {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.payment-left-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 6rem;
+}
+
+.payment-right-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* eSIM Highlight Card - Left Sidebar */
+.esim-highlight-card {
+  background: linear-gradient(135deg, #0038B8 0%, #0052e0 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 56, 184, 0.35);
+  border: 3px solid #fff;
+  position: relative;
+  overflow: hidden;
+  animation: cardPulse 2s ease-in-out infinite;
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(0, 56, 184, 0.35); }
+  50% { box-shadow: 0 12px 32px rgba(0, 56, 184, 0.55); }
+}
+
+.esim-highlight-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.esim-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.sim-icon {
+  font-size: 1.75rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.esim-highlight-card h3 {
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.esim-tagline {
+  color: #e6eeff;
+  font-size: 0.85rem;
+  margin: 0 0 1.25rem 0;
+  font-weight: 500;
+}
+
+.esim-quick-plans {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.quick-plan {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  padding: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.quick-plan:hover {
+  transform: translateX(4px);
+  border-color: #10b981;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.quick-plan .plan-name {
+  font-weight: 700;
+  color: var(--primary-blue);
+  font-size: 1rem;
+}
+
+.quick-plan .plan-price {
+  font-weight: 800;
+  color: #1e293b;
+  font-size: 1.15rem;
+}
+
+.quick-plan .plan-validity {
+  font-size: 0.75rem;
+  color: var(--gray-text);
+  font-weight: 600;
+}
+
+.view-all-plans-btn {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--primary-blue);
+  border: none;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.view-all-plans-btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.selected-plan-badge {
+  background: #10b981;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.selected-plan-badge button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.selected-plan-badge button:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.1);
+}
+
+/* Application Summary */
+.application-summary {
+  background: var(--primary-white);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.application-summary h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--primary-blue);
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-item.total {
+  padding-top: 1.5rem;
+  border-bottom: none;
+}
+
+.summary-item .label {
+  font-size: 0.95rem;
+  color: var(--gray-text);
+  font-weight: 600;
+}
+
+.summary-item .value {
+  font-size: 1rem;
+  color: var(--dark-text);
+  font-weight: 600;
+}
+
+.summary-item .value.amount {
+  font-size: 1.3rem;
+  color: var(--primary-blue);
+  font-weight: 700;
+}
+
+.summary-item.total .value.amount {
+  font-size: 1.8rem;
+}
+
+.summary-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary-blue) 50%, transparent 100%);
+  margin: 1rem 0;
+}
+
+/* Payment Methods */
+.payment-methods {
+  background: var(--primary-white);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.payment-methods h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0 0 2rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid var(--primary-blue);
+}
+
+.payment-methods h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin: 0 0 1rem 0;
+}
+
+.payment-method-selector {
+  margin-bottom: 2rem;
+}
+
+.method-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.method-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.method-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.method-option:hover {
+  background: #f0f0f0;
+  border-color: var(--primary-blue);
+  transform: translateY(-2px);
+}
+
+.method-option.active {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-color: var(--primary-blue);
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.2);
+}
+
+.method-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.method-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark-text);
+}
+
+/* Payment Instructions */
+.payment-instructions {
+  margin-bottom: 2rem;
+}
+
+.instruction-box {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe9a6 100%);
+  border-left: 4px solid #ffc107;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.instruction-box p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
+  color: #856404;
+  line-height: 1.6;
+}
+
+.instruction-box p strong {
+  color: #664d03;
+  font-weight: 700;
+}
+
+/* Payment Form */
+.payment-form {
+  margin-top: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input[type="text"] {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.form-group input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(0, 56, 184, 0.1);
+}
+
+.file-upload-box {
+  position: relative;
+  border: 2px dashed #e9ecef;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  background: #f8f9fa;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.file-upload-box:hover {
+  border-color: var(--primary-blue);
+  background: #f0f0f0;
+}
+
+.file-upload-box input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.upload-icon {
+  font-size: 2rem;
+}
+
+.file-selected {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.payment-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e9ecef;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 1rem 2rem;
+  background: #6c757d;
+  color: var(--primary-white);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+.btn-submit-payment {
+  flex: 2;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0052cc 100%);
+  color: var(--primary-white);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.3);
+}
+
+.btn-submit-payment:hover:not(:disabled) {
+  background: linear-gradient(135deg, #002a8f 0%, #003d99 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 56, 184, 0.4);
+}
+
+.btn-cancel:disabled,
+.btn-submit-payment:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading and Error States */
+.payment-loading,
+.payment-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e9ecef;
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.payment-loading p {
+  font-size: 1.1rem;
+  color: var(--gray-text);
+  margin: 0;
+}
+
+.payment-error h2 {
+  font-size: 1.8rem;
+  color: var(--dark-text);
+  margin: 0 0 1.5rem 0;
+}
+
+.btn-back {
+  padding: 0.85rem 2rem;
+  background: var(--primary-blue);
+  color: var(--primary-white);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-back:hover {
+  background: #002a8f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .payment-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .payment-left-sidebar {
+    position: static;
+  }
+
+  .application-summary {
+    position: relative;
+    top: 0;
+  }
+
+  .method-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-page {
+    padding: 5rem 1rem 2rem;
+  }
+
+  .payment-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .payment-header p {
+    font-size: 0.95rem;
+  }
+
+  .application-summary,
+  .payment-methods {
+    padding: 1.5rem;
+  }
+
+  .esim-highlight-card {
+    padding: 1.25rem;
+  }
+
+  .esim-card-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .method-options {
+    grid-template-columns: 1fr;
+  }
+
+  .payment-actions {
+    flex-direction: column;
+  }
+
+  .btn-cancel,
+  .btn-submit-payment {
+    width: 100%;
+  }
+}
+
+/* eSIM Full Plans Section (Right Side) */
+.esim-section.esim-full-plans {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 56, 184, 0.08);
+  border: 2px solid #e6eeff;
+  margin-bottom: 2rem;
+}
+
+/* eSIM Section Styles */
+.esim-section {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 56, 184, 0.08);
+  border: 2px solid #e6eeff;
+  margin-bottom: 2rem;
+}
+
+.esim-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.esim-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.esim-icon {
+  font-size: 2rem;
+}
+
+.esim-section h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin: 0;
+}
+
+.esim-subtitle {
+  font-size: 1rem;
+  color: var(--gray-text);
+  margin: 0;
+}
+
+.esim-plans-group {
+  margin-bottom: 2rem;
+}
+
+.esim-plans-group h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin: 0 0 0.5rem 0;
+}
+
+.unlimited-note {
+  font-size: 0.875rem;
+  color: #10b981;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.esim-plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.esim-plan-card {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.esim-plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 56, 184, 0.15);
+  border-color: var(--primary-blue);
+}
+
+.esim-plan-card.selected {
+  border-color: var(--primary-blue);
+  background: linear-gradient(135deg, #e6eeff 0%, #ffffff 100%);
+  box-shadow: 0 4px 16px rgba(0, 56, 184, 0.25);
+}
+
+.esim-plan-card.unlimited {
+  border-color: #10b981;
+}
+
+.esim-plan-card.unlimited.selected {
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 100%);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0052e0 100%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 56, 184, 0.3);
+}
+
+.plan-badge.unlimited-badge {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.plan-data {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-blue);
+  margin: 0.5rem 0 0.25rem 0;
+}
+
+.esim-plan-card.unlimited .plan-data {
+  color: #10b981;
+}
+
+.plan-validity {
+  font-size: 0.75rem;
+  color: var(--gray-text);
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.plan-price {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0.5rem 0 0 0;
+}
+
+.plan-selected-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 28px;
+  height: 28px;
+  background: var(--primary-blue);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 56, 184, 0.4);
+}
+
+.esim-plan-card.unlimited .plan-selected-icon {
+  background: #10b981;
+}
+
+/* eSIM Details Section */
+.esim-details-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px dashed #e2e8f0;
+}
+
+.read-more-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0052e0 100%);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.read-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 56, 184, 0.3);
+}
+
+.esim-details-content {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.detail-box {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--primary-blue);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.detail-box.benefits {
+  border-left-color: #10b981;
+}
+
+.detail-box h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark-text);
+  margin: 0 0 1rem 0;
+}
+
+.detail-box p {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--gray-text);
+  margin: 0 0 0.75rem 0;
+}
+
+.detail-box p:last-child {
+  margin-bottom: 0;
+}
+
+.detail-box .note {
+  background: #f0f9ff;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.detail-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+
+.detail-box ul li {
+  font-size: 0.95rem;
+  color: var(--gray-text);
+  padding: 0.5rem 0;
+  line-height: 1.6;
+}
+
+/* Selected eSIM Summary */
+.selected-esim-summary {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid #10b981;
+}
+
+.selected-esim-summary p {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #065f46;
+  margin: 0;
+}
+
+.selected-esim-summary strong {
+  color: #047857;
+}
+
+.remove-esim-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.remove-esim-btn:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* Responsive for eSIM Section */
+@media (max-width: 1024px) {
+  .esim-plans-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .esim-section {
+    padding: 1.5rem;
+  }
+
+  .esim-plans-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .selected-esim-summary {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .remove-esim-btn {
+    width: 100%;
+  }
+}

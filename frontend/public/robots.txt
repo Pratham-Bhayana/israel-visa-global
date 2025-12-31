@@ -1,0 +1,22 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:
+Allow: /
+
+# AI Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+Sitemap: https://yourdomain.com/sitemap.xml

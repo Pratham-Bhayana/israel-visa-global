@@ -1,0 +1,1397 @@
+/* Premium Application Form - Clean Design */
+.application-page {
+  min-height: calc(100vh - 80px);
+  padding: 6rem 2rem 4rem;
+  background: #FAFBFC;
+}
+
+.application-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.application-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.application-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.application-header p {
+  color: #64748B;
+  font-size: 1rem;
+}
+
+.application-content {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+/* ==========================================
+   COUNTRY SELECTION
+   ========================================== */
+
+.country-selection-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.country-selection-container h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.country-selection-container p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+.country-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Country Selection Cards */
+.visa-type-grid label:has(input[value="israel"]),
+.visa-type-grid label:has(input[value="india"]) {
+  min-height: 350px;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Israel Card Background */
+.visa-type-grid label:has(input[value="israel"])::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+  background-image: url('https://res.cloudinary.com/dlwn3lssr/image/upload/v1766729091/Flag_of_Israel.svg_woiesh.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 16px 16px 0 0;
+  z-index: 0;
+}
+
+/* India Card Background */
+.visa-type-grid label:has(input[value="india"])::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65%;
+  background-image: url('https://res.cloudinary.com/dlwn3lssr/image/upload/v1766729126/Flag_of_India.svg_oum0qv.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 16px 16px 0 0;
+  z-index: 0;
+}
+
+/* Content positioned below flag */
+.visa-type-grid label:has(input[value="israel"]) .visa-card-content,
+.visa-type-grid label:has(input[value="india"]) .visa-card-content {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding: 1.5rem;
+  background: #FFFFFF;
+  text-align: center;
+}
+
+.visa-type-grid label:has(input[value="israel"]) .visa-card-content h3,
+.visa-type-grid:has(input[value="india"]) .visa-card-content h3 {
+  color: #1E293B;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.visa-type-grid label:has(input[value="israel"]) .visa-card-content p,
+.visa-type-grid label:has(input[value="india"]) .visa-card-content p {
+  color: #64748B;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Check icon styling */
+.visa-type-grid label:has(input[value="israel"]) .check-icon,
+.visa-type-grid label:has(input[value="india"]) .check-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Progress Sidebar */
+.progress-sidebar {
+  position: sticky;
+  top: 100px;
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.progress-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: relative;
+}
+
+.progress-line {
+  position: absolute;
+  left: 23px;
+  top: 24px;
+  width: 3px;
+  height: calc(100% - 48px);
+  background: #E2E8F0;
+  z-index: 0;
+  border-radius: 2px;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #0038B8 0%, #0052E0 100%);
+  transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.step-number {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 3px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #94A3B8;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.progress-step.inactive .step-number {
+  background: #F8FAFC;
+  border: 3px solid #E2E8F0;
+  color: #CBD5E1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.progress-step.completed .step-number {
+  background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
+  border: 3px solid #0038B8;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.3);
+}
+
+.progress-step.active .step-number {
+  background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
+  border: 3px solid #0038B8;
+  color: #FFFFFF;
+  box-shadow: 0 6px 16px rgba(0, 56, 184, 0.5);
+  transform: scale(1.05);
+}
+
+.step-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #94A3B8;
+  transition: all 0.3s ease;
+}
+
+.progress-step.inactive .step-label {
+  color: #CBD5E1;
+  font-weight: 500;
+}
+
+.progress-step.completed .step-label {
+  color: #0F172A;
+  font-weight: 700;
+}
+
+.progress-step.active .step-label {
+  color: #0038B8;
+  font-weight: 700;
+}
+
+/* Form Wrapper */
+.form-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.application-form {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #E2E8F0;
+}
+
+.step-header-with-fee {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+}
+
+.step-header-text {
+  flex: 1;
+}
+
+.form-step h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.step-subtitle {
+  color: #64748B;
+  font-size: 0.9375rem;
+  margin-bottom: 0;
+}
+
+.visa-fee-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: linear-gradient(135deg, #0038B8 0%, #0046E0 100%);
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.25);
+  min-width: 150px;
+}
+
+.visa-fee-badge .fee-label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.visa-fee-badge .fee-amount {
+  color: #FFFFFF;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Visa Type Selection */
+.visa-type-section {
+  margin-bottom: 3rem;
+}
+
+/* E-Visa Check Section */
+.evisa-check-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF5D6 100%);
+  border-radius: 12px;
+  border: 1px solid #FFE8B3;
+  text-align: center;
+}
+
+.btn-evisa-check {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-evisa-check::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #FFE55C 0%, #FFB84D 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-evisa-check:hover::before {
+  opacity: 1;
+}
+
+.btn-evisa-check:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 165, 0, 0.4);
+}
+
+.btn-evisa-check > * {
+  position: relative;
+  z-index: 1;
+}
+
+.evisa-icon {
+  font-size: 1.5rem;
+}
+
+.evisa-badge {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #FF6B00;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.evisa-info {
+  margin-top: 1rem;
+  color: #8B6B00;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.visa-type-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0F172A;
+  margin-bottom: 1.25rem;
+}
+
+.visa-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.visa-type-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  min-height: 280px;
+}
+
+.visa-type-card:hover {
+  border-color: #0038B8;
+  box-shadow: 0 8px 24px rgba(0, 56, 184, 0.12);
+  transform: translateY(-4px);
+}
+
+.visa-type-card.selected {
+  border-color: #0038B8;
+  background: linear-gradient(135deg, #F1F5FF 0%, #FFFFFF 100%);
+  box-shadow: 0 8px 24px rgba(0, 56, 184, 0.2);
+  transform: translateY(-4px);
+}
+
+.visa-type-card input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.visa-type-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #F1F5FF 0%, #E0E7FF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-bottom: 1.25rem;
+}
+
+.visa-type-card.selected .visa-type-icon {
+  background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
+  transform: scale(1.05);
+}
+
+.visa-type-icon svg {
+  font-size: 2rem;
+  color: #0038B8;
+  transition: all 0.3s ease;
+}
+
+.visa-type-card.selected .visa-type-icon svg {
+  color: #FFFFFF;
+}
+
+.visa-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.visa-type-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 0.5rem;
+}
+
+.visa-type-desc {
+  font-size: 0.875rem;
+  color: #64748B;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.visa-type-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+.visa-fee {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0038B8;
+}
+
+.visa-validity {
+  font-size: 0.8125rem;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.visa-type-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.visa-type-inactive {
+  font-size: 0.75rem;
+  color: #EF4444;
+  font-weight: 500;
+  margin-top: 0.25rem;
+}
+
+.check-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0038B8;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.visa-type-card.selected .check-icon {
+  display: flex;
+}
+
+/* Country Flag Styling */
+.country-flag-container {
+  width: 100%;
+  height: 120px;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  margin: -2rem -1.5rem 1rem -1.5rem;
+}
+
+.country-flag {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* E-Visa Card Styling */
+.evisa-card {
+  background: linear-gradient(135deg, #FFF9E6 0%, #FFF5D6 100%);
+  border: 2px solid #FFD700;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.evisa-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(135deg, transparent 0%, rgba(255, 215, 0, 0.1) 50%, transparent 100%);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.evisa-card:hover::before {
+  top: -60%;
+  right: -60%;
+}
+
+.evisa-card:hover {
+  border-color: #FFA500;
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(255, 165, 0, 0.25);
+}
+
+.evisa-icon-badge {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+}
+
+.evisa-icon-badge svg {
+  color: #FFFFFF !important;
+}
+
+.evisa-badge-wrapper {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 165, 0, 0.2);
+}
+
+.evisa-fast-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #FF8C00;
+  background: rgba(255, 140, 0, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Upload Grid */
+.upload-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.upload-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.75rem;
+}
+
+.upload-box {
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 12px;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #F8FAFC;
+}
+
+.upload-box:hover {
+  border-color: #0038B8;
+  background: #F1F5FF;
+}
+
+.upload-box svg {
+  color: #0038B8;
+}
+
+.upload-text {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #1E293B;
+}
+
+.upload-hint {
+  font-size: 0.8125rem;
+  color: #64748B;
+}
+
+.file-uploaded {
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.file-uploaded-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1E293B;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-uploaded-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.file-action-btn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #0038B8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.file-action-btn:hover {
+  opacity: 0.7;
+}
+
+/* Processing Overlay */
+.processing-overlay {
+  background: #F1F5FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.processing-spinner {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 1rem;
+  border: 3px solid #E2E8F0;
+  border-top-color: #0038B8;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.processing-overlay p {
+  color: #0038B8;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+/* OCR Data Section */
+.ocr-data {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.ocr-data h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 0.25rem;
+}
+
+.ocr-subtitle {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.5rem;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #1E293B;
+  transition: all 0.2s ease;
+  background: #FFFFFF;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: #0038B8;
+  box-shadow: 0 0 0 3px rgba(0, 56, 184, 0.1);
+}
+
+.form-field textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+/* Section Title */
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 2rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #E2E8F0;
+}
+
+.spouse-info {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #F8FAFC;
+  border-radius: 12px;
+  border: 1px solid #E2E8F0;
+}
+
+/* Documents Grid */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.document-block {
+  background: #FFFFFF;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.document-block:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.document-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.document-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
+  color: #FFFFFF;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.document-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1E293B;
+  line-height: 1.4;
+}
+
+.document-upload-box {
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #F8FAFC;
+}
+
+.document-upload-box:hover {
+  border-color: #0038B8;
+  background: #F1F5FF;
+}
+
+.document-upload-box svg {
+  color: #0038B8;
+}
+
+.document-upload-box span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0038B8;
+}
+
+.document-uploaded {
+  background: #F0FDF4;
+  border: 1.5px solid #BBF7D0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.document-uploaded-name {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #166534;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.document-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.doc-action-link {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0038B8;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.doc-action-link:hover {
+  opacity: 0.7;
+}
+
+/* Review Section */
+.review-section {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.review-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.review-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.review-item {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+.review-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.review-value {
+  font-size: 0.875rem;
+  color: #1E293B;
+}
+
+.confirmation-checkbox {
+  background: #F1F5FF;
+  border: 1px solid #DBEAFE;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-top: 2rem;
+}
+
+.confirmation-checkbox label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.confirmation-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #0038B8;
+}
+
+.confirmation-checkbox span {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1E293B;
+  line-height: 1.5;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #E2E8F0;
+}
+
+.btn {
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 56, 184, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.3);
+}
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: #64748B;
+  border: 1.5px solid #E2E8F0;
+}
+
+.btn-secondary:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .application-content {
+    flex-direction: column;
+  }
+
+  .progress-sidebar {
+    position: relative;
+    top: 0;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .progress-steps {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .progress-step {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .progress-line {
+    left: 0;
+    right: 0;
+    top: 18px;
+    width: auto;
+    height: 2px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: var(--progress-width, 0%);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@media (max-width: 768px) {
+  .application-page {
+    padding: 5rem 1rem 2rem;
+  }
+
+  .application-form {
+    padding: 2rem 1.5rem;
+  }
+
+  .step-header-with-fee {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .visa-fee-badge {
+    align-items: center;
+    width: 100%;
+  }
+
+  .visa-fee-badge .fee-amount {
+    font-size: 1.5rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-step h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .application-page {
+    min-height: 85vh;
+    padding: 80px 12px 12px;
+    background: var(--primary-white);
+  }
+
+  .application-container {
+    padding: 0;
+    margin: 0;
+  }
+
+  .application-content {
+    gap: 0;
+  }
+
+  .form-wrapper {
+    width: 100%;
+  }
+
+  .application-header {
+    display: none;
+  }
+
+  .application-form {
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+    margin: 0;
+    box-shadow: 0 8px 32px rgba(0, 56, 184, 0.12);
+    overflow: hidden;
+  }
+
+  .form-step h2 {
+    font-size: 1.15rem;
+  }
+
+  .step-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .form-field label {
+    font-size: 0.875rem;
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  .country-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .visa-type-grid {
+    padding: 0;
+    gap: 1.5rem;
+  }
+
+  .visa-type-grid label:has(input[value="israel"]),
+  .visa-type-grid label:has(input[value="india"]) {
+    min-height: 420px;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 56, 184, 0.12);
+  }
+
+  .visa-type-grid label:has(input[value="israel"])::before,
+  .visa-type-grid label:has(input[value="india"])::before {
+    border-radius: 24px 24px 0 0;
+    height: 60%;
+  }
+
+  .visa-type-grid label:has(input[value="israel"]) .visa-card-content,
+  .visa-type-grid label:has(input[value="india"]) .visa-card-content {
+    padding: 2rem 1.5rem;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .visa-card-content h3 {
+    font-size: 1.25rem;
+  }
+
+  .visa-card-content p {
+    font-size: 0.875rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .visa-fee-badge .fee-amount {
+    font-size: 1.25rem;
+  }
+
+  .upload-box {
+    padding: 1.5rem 1rem;
+  }
+
+  .upload-box svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .review-section {
+    padding: 1.25rem;
+  }
+
+  .review-section h3 {
+    font-size: 1rem;
+  }
+
+  .review-item label {
+    font-size: 0.8125rem;
+  }
+
+  .review-item p {
+    font-size: 0.875rem;
+  }
+
+  .security-question-block {
+    padding: 1rem;
+  }
+
+  .security-question-label {
+    font-size: 0.9rem;
+  }
+
+  .checkbox-label {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ==========================================
+   SECURITY QUESTIONS SECTION
+   ========================================== */
+
+.security-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.security-question-block {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.security-question-block:hover {
+  border-color: #0038B8;
+  box-shadow: 0 2px 8px rgba(0, 56, 184, 0.08);
+}
+
+.security-question-label {
+  display: block;
+  font-weight: 600;
+  color: #1E293B;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* Checkbox Label Styles */
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 1rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-label:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: #0038B8;
+  flex-shrink: 0;
+}
+
+.checkbox-label span {
+  flex: 1;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Spouse Info and Military Info Sections */
+.spouse-info,
+.military-info,
+.previous-visit-info {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+}
+
+.spouse-info h3,
+.military-info h3,
+.previous-visit-info h3 {
+  margin-bottom: 1rem;
+}

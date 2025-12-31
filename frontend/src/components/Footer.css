@@ -1,0 +1,176 @@
+.footer {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+  color: var(--primary-white);
+  padding: 4rem 0 2rem;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-brand {
+  max-width: 350px;
+}
+
+.footer-logo {
+  margin-bottom: 16px;
+}
+
+.footer-logo h3 {
+  color: var(--primary-white);
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.footer-description {
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-white);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+  background: var(--primary-white);
+  color: var(--primary-blue);
+  transform: translateY(-3px);
+}
+
+.social-icon {
+  font-style: normal;
+  font-size: 1.2rem;
+}
+
+.footer-links h4 {
+  color: var(--primary-white);
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.75rem;
+}
+
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  display: inline-block;
+}
+
+.footer-link:hover {
+  color: var(--primary-white);
+  transform: translateX(5px);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-evisa-btn {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #1a1a1a;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+}
+
+.footer-evisa-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 165, 0, 0.4);
+}
+
+.footer-evisa-btn svg {
+  flex-shrink: 0;
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 992px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-brand {
+    text-align: center;
+  }
+
+  .footer-social {
+    justify-content: center;
+  }
+
+  .footer-links {
+    text-align: center;
+  }
+}
