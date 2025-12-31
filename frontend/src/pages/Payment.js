@@ -26,6 +26,7 @@ const Payment = () => {
       return;
     }
     fetchApplicationDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, applicationId, navigate]);
 
   const fetchApplicationDetails = async () => {

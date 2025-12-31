@@ -26,6 +26,7 @@ const Profile = () => {
     } else {
       fetchApplications();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, navigate]);
 
   const fetchApplications = async () => {

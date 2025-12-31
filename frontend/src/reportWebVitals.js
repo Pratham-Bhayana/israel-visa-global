@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react'; // unused
 
 const reportWebVitals = (onPerfEntry) => {
   if (onPerfEntry && onPerfEntry instanceof Function) {

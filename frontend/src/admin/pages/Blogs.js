@@ -22,6 +22,7 @@ const Blogs = () => {
 
   useEffect(() => {
     fetchBlogs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, pagination.currentPage]);
 
   const fetchBlogs = async () => {
