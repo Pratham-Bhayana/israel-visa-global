@@ -48,9 +48,9 @@ const Home = () => {
     }
   };
 
-  const handleEVisaClick = () => {
-    setShowEligibilityModal(true);
-  };
+  // const handleEVisaClick = () => {
+  //   setShowEligibilityModal(true);
+  // };
 
   const features = [
     {

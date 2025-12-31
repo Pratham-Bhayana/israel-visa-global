@@ -45,6 +45,7 @@ const VisaTypes = () => {
 
   useEffect(() => {
     fetchVisaTypes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const fetchVisaTypes = async () => {

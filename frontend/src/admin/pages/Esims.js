@@ -21,6 +21,7 @@ const Esims = () => {
   useEffect(() => {
     fetchEsims();
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, typeFilter, page]);
 
   const fetchEsims = async () => {
@@ -76,7 +77,7 @@ const Esims = () => {
     setUpdating(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/api/admin/esims/${applicationId}`,
         {
           status,

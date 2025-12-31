@@ -19,6 +19,7 @@ const Payments = () => {
   useEffect(() => {
     fetchPayments();
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, page]);
 
   const fetchPayments = async () => {
@@ -81,7 +82,7 @@ const Payments = () => {
         payload.rejectionReason = rejectionReason;
       }
 
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/api/admin/payments/${selectedPayment._id}`,
         payload,
         {

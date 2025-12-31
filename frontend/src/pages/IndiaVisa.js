@@ -13,9 +13,7 @@ import {
   FaCalendarAlt,
   FaUsers,
   FaChevronDown,
-  FaMapMarkerAlt,
   FaPhone,
-  FaEnvelope,
   FaBuilding,
   FaUserTie,
   FaHotel,
@@ -26,7 +24,6 @@ import './IndiaVisa.css';
 const IndiaVisa = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(null);
-  const [formData, setFormData] = useState({});
   const [visaTypes, setVisaTypes] = useState([]);
   const [loadingVisas, setLoadingVisas] = useState(true);
   const { scrollYProgress } = useScroll();
