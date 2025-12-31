@@ -12,7 +12,6 @@ import './Application.css';
 
 const Application = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { currentUser } = useAuth();
   const [countrySelection, setCountrySelection] = React.useState('');

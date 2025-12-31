@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import './Navbar.css';
@@ -45,10 +45,10 @@ const Navbar = () => {
     }
   };
 
-  const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/profile', label: 'My Profile' },
-  ];
+  // const navLinks = [
+  //   { path: '/', label: 'Home' },
+  //   { path: '/profile', label: 'My Profile' },
+  // ];
 
   return (
     <motion.nav
