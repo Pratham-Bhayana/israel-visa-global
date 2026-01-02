@@ -6,6 +6,8 @@ import axios from 'axios';
 import ConfirmModal from '../components/ConfirmModal';
 import './Blogs.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +38,7 @@ const Blogs = () => {
         ...(filters.search && { search: filters.search }),
       });
 
-      const response = await axios.get(`http://localhost:5000/api/admin/blogs?${params}`, {
+      const response = await axios.get(`${API_URL}/api/admin/blogs?${params}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'x-user-email': adminUser.email || '',
@@ -75,7 +77,7 @@ const Blogs = () => {
     const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
     
     try {
-      await axios.delete(`http://localhost:5000/api/admin/blogs/${id}`, {
+      await axios.delete(`${API_URL}/api/admin/blogs/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'x-user-email': adminUser.email || '',

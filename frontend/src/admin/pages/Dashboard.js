@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import './Dashboard.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Dashboard = () => {
   const [stats, setStats] = useState({
     totalApplications: 0,
@@ -22,7 +24,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-      const response = await fetch('http://localhost:5000/api/admin/dashboard', {
+      const response = await fetch(`${API_URL}/api/admin/dashboard`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'x-user-email': adminUser.email || '',

@@ -5,6 +5,8 @@ import axios from 'axios';
 import ConfirmModal from '../components/ConfirmModal';
 import './ContentManagement.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const ContentManagement = () => {
   const [activeTab, setActiveTab] = useState('visa-types');
   const [visaTypes, setVisaTypes] = useState([]);
@@ -30,7 +32,7 @@ const ContentManagement = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('http://localhost:5000/api/visa-types/all', {
+      const response = await axios.get(`${API_URL}/api/visa-types/all`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -74,14 +76,14 @@ const ContentManagement = () => {
     try {
       if (editingVisa) {
         await axios.put(
-          `http://localhost:5000/api/admin/visa-types/${editingVisa._id}`,
+          `${API_URL}/api/admin/visa-types/${editingVisa._id}`,
           submitData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success('Visa type updated successfully');
       } else {
         await axios.post(
-          'http://localhost:5000/api/admin/visa-types',
+          `${API_URL}/api/admin/visa-types`,
           submitData,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -132,7 +134,7 @@ const ContentManagement = () => {
     const token = localStorage.getItem('adminToken');
     try {
       await axios.delete(
-        `http://localhost:5000/api/admin/visa-types/${id}`,
+        `${API_URL}/api/admin/visa-types/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success('Visa type deleted successfully');
@@ -146,7 +148,7 @@ const ContentManagement = () => {
     const token = localStorage.getItem('adminToken');
     try {
       await axios.put(
-        `http://localhost:5000/api/admin/visa-types/${id}`,
+        `${API_URL}/api/admin/visa-types/${id}`,
         { isActive: !currentStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

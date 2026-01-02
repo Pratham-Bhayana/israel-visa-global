@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import ConfirmModal from '../components/ConfirmModal';
 import './ApplicationDetails.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const ApplicationDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const ApplicationDetails = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-      const response = await fetch(`http://localhost:5000/api/admin/applications/${id}`, {
+      const response = await fetch(`${API_URL}/api/admin/applications/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'x-user-email': adminUser.email || '',
@@ -97,7 +99,7 @@ const ApplicationDetails = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-      const response = await fetch(`http://localhost:5000/api/admin/applications/${id}/status`, {
+      const response = await fetch(`${API_URL}/api/admin/applications/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -134,7 +136,7 @@ const ApplicationDetails = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-      const response = await fetch(`http://localhost:5000/api/admin/applications/${id}/notes`, {
+      const response = await fetch(`${API_URL}/api/admin/applications/${id}/notes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -432,7 +434,7 @@ const ApplicationDetails = () => {
                       </div>
                     </div>
                     <a
-                      href={doc.path && doc.path.startsWith('http') ? doc.path : `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/uploads/additional-documents/${doc.filename || doc.path}`}
+                      href={doc.path && doc.path.startsWith('http') ? doc.path : `${API_URL}/uploads/additional-documents/${doc.filename || doc.path}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-view-doc"

@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import './Applications.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Applications = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +37,7 @@ const Applications = () => {
         ...(filters.search && { search: filters.search }),
       });
 
-      const response = await fetch(`http://localhost:5000/api/admin/applications?${params}`, {
+      const response = await fetch(`${API_URL}/api/admin/applications?${params}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'x-user-email': adminUser.email || '',

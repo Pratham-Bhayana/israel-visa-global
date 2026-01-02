@@ -6,6 +6,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './BlogEditor.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const BlogEditor = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -61,7 +63,7 @@ const BlogEditor = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
-      const response = await axios.get(`http://localhost:5000/api/admin/blogs/${id}`, {
+      const response = await axios.get(`${API_URL}/api/admin/blogs/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'x-user-email': adminUser.email || '',
@@ -213,10 +215,10 @@ const BlogEditor = () => {
       };
 
       if (isEditing) {
-        await axios.put(`http://localhost:5000/api/admin/blogs/${id}`, formData, { headers });
+        await axios.put(`${API_URL}/api/admin/blogs/${id}`, formData, { headers });
         toast.success('Blog updated successfully');
       } else {
-        await axios.post('http://localhost:5000/api/admin/blogs', formData, { headers });
+        await axios.post(`${API_URL}/api/admin/blogs`, formData, { headers });
         toast.success('Blog created successfully');
       }
 

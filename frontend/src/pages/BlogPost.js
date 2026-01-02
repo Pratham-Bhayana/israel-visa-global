@@ -4,6 +4,8 @@ import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import './BlogPost.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ const BlogPost = () => {
 
   const fetchBlog = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/blogs/${slug}`);
+      const response = await axios.get(`${API_URL}/api/blogs/${slug}`);
       if (response.data.success) {
         setBlog(response.data.blog);
       }
@@ -57,7 +59,7 @@ const BlogPost = () => {
 
   const fetchRelatedBlogs = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/blogs/related/${slug}`);
+      const response = await axios.get(`${API_URL}/api/blogs/related/${slug}`);
       if (response.data.success) {
         setRelatedBlogs(response.data.blogs || []);
       }
