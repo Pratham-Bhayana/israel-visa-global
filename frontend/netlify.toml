@@ -1,4 +1,5 @@
 # Netlify Configuration for React App
+# Updated: 2026-01-02 - Production API configured
 
 [build]
   command = "npm run build"
