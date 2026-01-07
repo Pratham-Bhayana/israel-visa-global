@@ -369,7 +369,7 @@ const IndiaVisa = () => {
             {loadingVisas ? (
               <div className="loading-message">Loading visa types...</div>
             ) : visaTypes.length === 0 ? (
-              <div className="no-visas-message">No visa types available at the moment.</div>
+              <div className="no-visas-message" style={{textAlign:"center"}}>No visa types available at the moment.</div>
             ) : (
               visaTypes.map((visa, index) => (
                 <motion.div
