@@ -516,3 +516,15 @@
     padding: 2rem 1.5rem;
   }
 }
+
+
+.loading-message{
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--gray-text);
+}
+.no-visas-message{
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--gray-text);
+}
