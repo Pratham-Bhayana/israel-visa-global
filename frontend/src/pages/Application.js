@@ -185,20 +185,20 @@ const Application = () => {
     espionageDetails: '',
     
     // Documents
-    passportAllPages: null,
-    photograph: null,
-    requestLetter: null,
-    nocEmployer: null,
-    salarySlips: null,
-    itinerary: null,
-    hotelBooking: null,
-    ticket: null,
-    travelInsurance: null,
-    bankStatement: null,
-    aadharCard: null,
-    itr: null,
-    additionalPassportPages: null,
-    supportingDocuments: null,
+   passportAllPages: [],
+photograph: [],
+requestLetter: [],
+nocEmployer: [],
+salarySlips: [],
+itinerary: [],
+hotelBooking: [],
+ticket: [],
+travelInsurance: [],
+bankStatement: [],
+aadharCard: [],
+itr: [],
+additionalPassportPages: [],
+supportingDocuments: [],
   });
 
   // Fetch Israel visa types on component mount
@@ -250,8 +250,8 @@ const Application = () => {
   };
 
   const handleFileChange = async (e) => {
-    const file = e.target.files[0];
     const fieldName = e.target.name;
+  const file = Array.from(e.target.files);
     
     if (file) {
       // Store file immediately
@@ -1683,7 +1683,8 @@ const Application = () => {
                             <label className="document-label">{doc.label}</label>
                           </div>
                           
-                          {!formData[doc.id] ? (
+                            {!formData[doc.id] || formData[doc.id]?.length === 0 ? (
+                              <div className="upload-with-plus">
                             <label htmlFor={doc.id} className="document-upload-box">
                               <input
                                 type="file"
@@ -1699,6 +1700,11 @@ const Application = () => {
                               </svg>
                               <span>Upload</span>
                             </label>
+
+                            <label htmlFor={`${doc.id}-plus`} className="upload-plus-btn"><input type="file" id={`${doc.id}-plus`} name={doc.id} onChange={handleFileChange} accept="image/*,.pdf" hidden multiple />+</label>
+
+                            </div>
+                            
                           ) : (
                             <div className="document-uploaded">
                               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
