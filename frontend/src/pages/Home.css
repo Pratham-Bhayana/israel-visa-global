@@ -412,15 +412,15 @@
   }
 
   .hero-video-container {
-    top: 90px;
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
-    border-radius: 16px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 0px;
   }
 
   .hero-video {
-    border-radius: 16px;
+    border-radius: 0px;
   }
 
   .hero-content {
@@ -475,15 +475,15 @@
   }
 
   .hero-video-container {
-    top: 80px;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    border-radius: 12px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 0px;
   }
 
   .hero-video {
-    border-radius: 12px;
+    border-radius: 0px;
   }
 
   .hero-content {

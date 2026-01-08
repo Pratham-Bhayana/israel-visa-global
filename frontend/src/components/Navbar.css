@@ -32,6 +32,16 @@
   color: var(--primary-white);
   letter-spacing: -0.02em;
 }
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between logo and text */
+}
+
+.logo-image {
+  height: 120px;
+  width: auto;
+}
 
 .logo-icon {
   font-size: 2rem;

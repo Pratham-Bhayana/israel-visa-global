@@ -58,9 +58,10 @@ const Navbar = () => {
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <div className="navbar-container container">
-        <Link to="/" className="navbar-logo">
-          <span className="logo-text">Israel Visa Global</span>
-        </Link>
+       <Link to="/" className="navbar-logo">
+       <img src="https://res.cloudinary.com/dl99np8d8/image/upload/v1767872561/RES-VISA_1_kt191k.png" alt="Logo" className="logo-image"/>
+      </Link>
+        
 
         <div className={`navbar-menu ${isMobileMenuOpen ? 'active' : ''}`}>
           <ul className="navbar-links">
