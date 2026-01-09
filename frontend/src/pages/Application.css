@@ -1130,6 +1130,7 @@
     top: 0;
     width: 100%;
     margin-bottom: 2rem;
+    padding-top: 10px;
   }
 
   .progress-steps {
@@ -1153,7 +1154,7 @@
   .progress-line {
     left: 0;
     right: 0;
-    top: 18px;
+    top: 30px;
     width: auto;
     height: 2px;
   }

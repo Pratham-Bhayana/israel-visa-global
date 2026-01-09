@@ -6,7 +6,8 @@
   z-index: 1000;
   background: var(--primary-blue);
   transition: all var(--transition-normal);
-  padding: 0.75rem 0;
+  height: 80px;    
+  /* padding: 0.5rem 0; */
   box-shadow: 0 2px 8px rgba(0, 56, 184, 0.15);
 }
 
@@ -20,6 +21,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;     
+
 }
 
 .navbar-logo {
@@ -39,7 +42,7 @@
 }
 
 .logo-image {
-  height: 40px;
+  height: 80px;
   width: auto;
 }
 
