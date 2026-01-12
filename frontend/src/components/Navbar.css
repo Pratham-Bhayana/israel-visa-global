@@ -6,7 +6,8 @@
   z-index: 1000;
   background: var(--primary-blue);
   transition: all var(--transition-normal);
-  padding: 0.75rem 0;
+  height: 80px;    
+  /* padding: 0.5rem 0; */
   box-shadow: 0 2px 8px rgba(0, 56, 184, 0.15);
 }
 
@@ -20,6 +21,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;     
+
 }
 
 .navbar-logo {
@@ -31,6 +34,16 @@
   font-weight: 700;
   color: var(--primary-white);
   letter-spacing: -0.02em;
+}
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between logo and text */
+}
+
+.logo-image {
+  height: 80px;
+  width: auto;
 }
 
 .logo-icon {

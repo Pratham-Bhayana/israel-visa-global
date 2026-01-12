@@ -566,7 +566,7 @@
 /* Country Flag Styling */
 .country-flag-container {
   width: 100%;
-  height: 120px;
+  height: 250px;
   border-radius: 12px 12px 0 0;
   overflow: hidden;
   margin: -2rem -1.5rem 1rem -1.5rem;
@@ -905,6 +905,13 @@
   color: #1E293B;
   line-height: 1.4;
 }
+.upload-with-plus {
+  display: flex;
+  align-items: stretch;        
+  justify-content: center;    
+  gap: 12px;
+  padding-top: 10px;
+}
 
 .document-upload-box {
   border: 1.5px dashed #CBD5E1;
@@ -913,11 +920,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
   background: #F8FAFC;
+  width: 120px;
+  height: 120px;
 }
+
+.upload-plus-btn {
+  border: 1.5px dashed #CBD5E1;
+  border-radius: 8px;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #F8FAFC;
+  font-size: 28px;
+  font-weight: 600;
+}
+.upload-plus-btn:hover {
+  border-color: #0038B8;
+  background: #F1F5FF;
+}
+
 
 .document-upload-box:hover {
   border-color: #0038B8;
@@ -933,6 +963,7 @@
   font-weight: 600;
   color: #0038B8;
 }
+
 
 .document-uploaded {
   background: #F0FDF4;
@@ -1099,6 +1130,7 @@
     top: 0;
     width: 100%;
     margin-bottom: 2rem;
+    padding-top: 10px;
   }
 
   .progress-steps {
@@ -1122,7 +1154,7 @@
   .progress-line {
     left: 0;
     right: 0;
-    top: 18px;
+    top: 30px;
     width: auto;
     height: 2px;
   }
@@ -1395,3 +1427,6 @@
 .previous-visit-info h3 {
   margin-bottom: 1rem;
 }
+
+
+

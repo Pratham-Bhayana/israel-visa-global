@@ -188,20 +188,20 @@ const Application = () => {
     espionageDetails: '',
     
     // Documents
-    passportAllPages: null,
-    photograph: null,
-    requestLetter: null,
-    nocEmployer: null,
-    salarySlips: null,
-    itinerary: null,
-    hotelBooking: null,
-    ticket: null,
-    travelInsurance: null,
-    bankStatement: null,
-    aadharCard: null,
-    itr: null,
-    additionalPassportPages: null,
-    supportingDocuments: null,
+   passportAllPages: [],
+photograph: [],
+requestLetter: [],
+nocEmployer: [],
+salarySlips: [],
+itinerary: [],
+hotelBooking: [],
+ticket: [],
+travelInsurance: [],
+bankStatement: [],
+aadharCard: [],
+itr: [],
+additionalPassportPages: [],
+supportingDocuments: [],
   });
 
   // Fetch Israel visa types on component mount
@@ -253,8 +253,8 @@ const Application = () => {
   };
 
   const handleFileChange = async (e) => {
-    const file = e.target.files[0];
     const fieldName = e.target.name;
+  const file = Array.from(e.target.files);
     
     if (file) {
       // Store file immediately
@@ -1786,56 +1786,101 @@ const Application = () => {
                   </div>
                 )}
 
-                {/* Step 7 Israel: Documents Upload */}
-                {step === 7 && countrySelection === 'israel' && (
-                  <div className="form-step">
-                    <h2>Required Documents</h2>
-                    <p className="step-subtitle">Please upload all required documents</p>
+              {/* Step 7 Israel: Documents Upload */}
+{step === 7 && countrySelection === 'israel' && (
+  <div className="form-step">
+    <h2>Required Documents</h2>
+    <p className="step-subtitle">Please upload all required documents</p>
 
-                    <div className="documents-grid">
-                      {documents.map((doc) => (
-                        <div key={doc.id} className="document-block">
-                          <div className="document-header">
-                            <span className="document-number">{documents.indexOf(doc) + 1}</span>
-                            <label className="document-label">{doc.label}</label>
-                          </div>
-                          
-                          {!formData[doc.id] ? (
-                            <label htmlFor={doc.id} className="document-upload-box">
-                              <input
-                                type="file"
-                                id={doc.id}
-                                name={doc.id}
-                                onChange={handleFileChange}
-                                accept="image/*,.pdf"
-                                hidden
-                                required={doc.required}
-                              />
-                              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                              </svg>
-                              <span>Upload</span>
-                            </label>
-                          ) : (
-                            <div className="document-uploaded">
-                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
-                                <polyline points="20 6 9 17 4 12"/>
-                              </svg>
-                              <span className="document-uploaded-name">{formData[doc.id].name}</span>
-                              <div className="document-actions">
-                                <label htmlFor={doc.id} className="doc-action-link">
-                                  <input type="file" id={doc.id} name={doc.id} onChange={handleFileChange} accept="image/*,.pdf" hidden />
-                                  Change
-                                </label>
-                                <button type="button" onClick={() => handleRemoveFile(doc.id)} className="doc-action-link">Remove</button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+    <div className="documents-grid">
+      {documents.map((doc, index) => (
+        <div key={doc.id} className="document-block">
+
+          <div className="document-header">
+            <span className="document-number">{index + 1}</span>
+            <label className="document-label">{doc.label}</label>
+          </div>
+
+          {/* UPLOAD (ONLY FIRST TIME) + PLUS (ALWAYS) */}
+          <div className="upload-with-plus">
+
+            {/* Upload only when no file */}
+            {(!formData[doc.id] || formData[doc.id].length === 0) && (
+              <label htmlFor={doc.id} className="document-upload-box">
+                <input
+                  type="file"
+                  id={doc.id}
+                  name={doc.id}
+                  onChange={handleFileChange}
+                  accept="image/*,.pdf"
+                  hidden
+                  required={doc.required}
+                />
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                </svg>
+                <span>Upload</span>
+              </label>
+            )}
+
+            {/*  PLUS  */}
+            <label htmlFor={`${doc.id}-plus`} className="upload-plus-btn">
+              <input
+                type="file"
+                id={`${doc.id}-plus`}
+                name={doc.id}
+                onChange={handleFileChange}
+                accept="image/*,.pdf"
+                hidden
+                multiple
+              />
+              +
+            </label>
+
+          </div>
+
+          {/* AFTER UPLOAD INFO */}
+          {formData[doc.id] && formData[doc.id].length > 0 && (
+            <div className="document-uploaded">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+
+              {/* ✅ FILE COUNT (FIXED) */}
+              <span className="document-uploaded-name">
+                {formData[doc.id].length} file(s) uploaded
+              </span>
+
+              <div className="document-actions">
+                <label htmlFor={doc.id} className="doc-action-link">
+                  <input
+                    type="file"
+                    id={doc.id}
+                    name={doc.id}
+                    onChange={handleFileChange}
+                    accept="image/*,.pdf"
+                    hidden
+                  />
+                  Change
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => handleRemoveFile(doc.id)}
+                  className="doc-action-link"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          )}
+
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
 
                 {/* Step 7 India: Previous Visit History */}
                 {step === 7 && countrySelection === 'india' && (

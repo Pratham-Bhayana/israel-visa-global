@@ -91,18 +91,18 @@ const applicationSchema = new mongoose.Schema(
     
     // Step 7: Documents
     documents: {
-      passportPages: String,
-      photo: String,
-      requestLetter: String,
-      noc: String,
-      salarySlips: String,
-      itinerary: String,
-      hotelBooking: String,
-      ticketReservation: String,
-      travelInsurance: String,
-      bankStatement: String,
-      aadharCard: String,
-      itrCertificate: String,
+      passportPages: [String],
+      photo:[ String],
+      requestLetter: [String],
+      noc: [String],
+      salarySlips:[ String],
+      itinerary: [String],
+      hotelBooking: [String],
+      ticketReservation: [String],
+      travelInsurance:[ String],
+      bankStatement:[ String],
+      aadharCard: [String],
+      itrCertificate:[ String],
     },
     
     // eSIM Information
