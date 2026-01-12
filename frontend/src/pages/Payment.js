@@ -211,8 +211,10 @@ const Payment = () => {
   return (
     <>
       <Helmet>
-        <title>Payment - Israel Visa Application</title>
-        <meta name="description" content="Complete your visa application payment" />
+        <title>Secure Payment - Israel Visa Application | Complete Your Payment</title>
+        <meta name="description" content="Complete your Israel visa application payment securely. Multiple payment options available with instant confirmation and receipt." />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/payment/${applicationId}`} />
       </Helmet>
 
       <div className="payment-page">

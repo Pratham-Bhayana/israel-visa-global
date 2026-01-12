@@ -681,8 +681,43 @@ supportingDocuments: [],
   return (
     <>
       <Helmet>
-        <title>Apply for Visa - Israel Visa Application</title>
-        <meta name="description" content="Apply for your Israel visa - Complete the application form" />
+        <title>Apply for Israel Visa Online - Official Visa Application Form</title>
+        <meta name="description" content="Apply for your Israel visa online. Complete the secure visa application form and upload documents. Fast processing in 3-5 business days with real-time tracking." />
+        <meta name="keywords" content="Israel visa application, apply Israel visa, Israel visa form, Israel e-visa, Israel visa online" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/apply`} />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Apply for Israel Visa - Official Application Portal" />
+        <meta property="og:description" content="Complete your Israel visa application online. Secure, fast, and hassle-free process with expert support." />
+        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/apply`} />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Apply for Israel Visa Online - Secure Application" />
+        <meta name="twitter:description" content="Complete your Israel visa application online. Fast, secure processing with real-time tracking." />
+        
+        {/* Breadcrumb Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Apply for Visa",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/application`
+              }
+            ]
+          })}
+        </script>
       </Helmet>
 
       <div className="application-page">

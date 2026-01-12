@@ -41,8 +41,11 @@ const Signup = () => {
   return (
     <>
       <Helmet>
-        <title>Sign Up - Israel Visa Application</title>
-        <meta name="description" content="Create your Israel visa application account" />
+        <title>Create Account - Sign Up | Israel Visa Application Portal</title>
+        <meta name="description" content="Create your Israel visa application account. Fast registration with Google or mobile number. Start your visa application today." />
+        <meta name="keywords" content="Israel visa signup, create visa account, visa registration" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/signup`} />
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <div className="auth-page">

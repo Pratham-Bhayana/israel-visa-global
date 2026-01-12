@@ -199,8 +199,10 @@ const Profile = () => {
   return (
     <>
       <Helmet>
-        <title>My Profile - Israel Visa Application</title>
-        <meta name="description" content="View your profile and visa application status" />
+        <title>My Profile - Israel Visa Application Status & Dashboard</title>
+        <meta name="description" content="View and track your Israel visa application status, manage documents, and update profile information. Check real-time visa processing updates." />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/profile`} />
       </Helmet>
 
       <div className="profile-page">

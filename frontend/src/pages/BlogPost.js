@@ -106,19 +106,84 @@ const BlogPost = () => {
         <title>{blog.metaTitle}</title>
         <meta name="description" content={blog.metaDescription} />
         <meta name="keywords" content={blog.keywords.join(', ')} />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`} />
         
         {/* Open Graph */}
         <meta property="og:title" content={blog.metaTitle} />
         <meta property="og:description" content={blog.metaDescription} />
         {blog.featuredImage?.url && <meta property="og:image" content={blog.featuredImage.url} />}
         <meta property="og:type" content="article" />
+        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`} />
         <meta property="article:published_time" content={blog.publishedAt || blog.createdAt} />
+        <meta property="article:modified_time" content={blog.updatedAt || blog.createdAt} />
+        <meta property="article:author" content={blog.author || "Israel Visa Portal"} />
+        {blog.categories && blog.categories.map((cat, idx) => (
+          <meta key={idx} property="article:tag" content={cat} />
+        ))}
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={blog.metaTitle} />
         <meta name="twitter:description" content={blog.metaDescription} />
         {blog.featuredImage?.url && <meta name="twitter:image" content={blog.featuredImage.url} />}
+        {blog.featuredImage?.url && <meta name="twitter:image:alt" content={blog.title} />}
+
+        {/* Breadcrumb Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": blog.title,
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`
+              }
+            ]
+          })}
+        </script>
+
+        {/* Article Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": blog.title,
+            "description": blog.metaDescription,
+            "image": blog.featuredImage?.url,
+            "datePublished": blog.publishedAt || blog.createdAt,
+            "dateModified": blog.updatedAt || blog.createdAt,
+            "author": {
+              "@type": "Person",
+              "name": blog.author || "Israel Visa Portal Team"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Israel Visa Application Portal",
+              "logo": {
+                "@type": "ImageObject",
+                "url": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/logo.png`
+              }
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`
+            }
+          })}
+        </script>
 
         {/* FAQ Schema */}
         {faqSchema && (
