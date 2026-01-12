@@ -238,7 +238,7 @@ const Applications = () => {
                     </td>
                     <td>
                       <span className="visa-type-badge">
-                        {app.visaType?.charAt(0).toUpperCase() + app.visaType?.slice(1) || 'N/A'}
+                        {app.visaType?.name || (app.visaType?.charAt(0).toUpperCase() + app.visaType?.slice(1)) || 'N/A'}
                       </span>
                     </td>
                     <td>

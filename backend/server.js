@@ -14,12 +14,27 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// Configure allowed origins
+const getAllowedOrigins = () => {
+  if (process.env.NODE_ENV === 'production') {
+    // Support comma-separated multiple origins in production
+    const origins = process.env.FRONTEND_URL 
+      ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+      : [];
+    return origins;
+  }
+  return [
+    process.env.FRONTEND_URL || 'http://localhost:3000', 
+    'http://localhost:3001'
+  ];
+};
+
+const allowedOrigins = getAllowedOrigins();
+
 // Initialize Socket.io
 const io = socketIo(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
-      ? [process.env.FRONTEND_URL]
-      : [process.env.FRONTEND_URL || 'http://localhost:3000', 'http://localhost:3001'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -31,9 +46,7 @@ app.use(helmet({
   contentSecurityPolicy: false,
 })); // Security headers
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL]
-    : [process.env.FRONTEND_URL || 'http://localhost:3000', 'http://localhost:3001'],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-user-email', 'x-user-name', 'x-user-uid'],

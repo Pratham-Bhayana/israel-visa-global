@@ -1,0 +1,235 @@
+.upload-progress-backdrop {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px;
+}
+
+.upload-progress-modal {
+  position: static !important;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  z-index: 100000;
+}
+
+.upload-progress-header {
+  text-align: center;
+  padding: 32px 24px 24px;
+  background: linear-gradient(135deg, #0038B8 0%, #0052E6 100%);
+  color: white;
+}
+
+.upload-icon-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.upload-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-icon svg {
+  color: white;
+}
+
+.upload-progress-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.upload-progress-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.upload-progress-content {
+  padding: 24px;
+  max-height: calc(80vh - 200px);
+  overflow-y: auto;
+}
+
+.upload-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.upload-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.upload-item.uploading {
+  background: #E3F2FD;
+  border: 1px solid #90CAF9;
+}
+
+.upload-item.completed {
+  background: #E8F5E9;
+  border: 1px solid #81C784;
+}
+
+.upload-item.error {
+  background: #FFEBEE;
+  border: 1px solid #EF5350;
+}
+
+.upload-item-icon {
+  flex-shrink: 0;
+}
+
+.status-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-item-details {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.upload-item-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.upload-item-status.success {
+  color: #2E7D32;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.upload-item-status.uploading {
+  color: #0038B8;
+  background: rgba(0, 56, 184, 0.1);
+}
+
+.upload-item-status.error {
+  color: #C62828;
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.upload-progress-bar-container {
+  margin-top: 20px;
+}
+
+.upload-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.upload-progress-bar {
+  height: 8px;
+  background: #E0E0E0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.upload-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0038B8 0%, #0052E6 100%);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Scrollbar Styling */
+.upload-progress-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.upload-progress-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.upload-progress-content::-webkit-scrollbar-thumb {
+  background: #0038B8;
+  border-radius: 10px;
+}
+
+.upload-progress-content::-webkit-scrollbar-thumb:hover {
+  background: #002E8C;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .upload-progress-modal {
+    width: 92%;
+    max-height: 90vh;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .upload-progress-header {
+    padding: 24px 20px 20px;
+  }
+
+  .upload-progress-header h3 {
+    font-size: 20px;
+  }
+
+  .upload-progress-content {
+    padding: 20px;
+  }
+
+  .upload-item-name {
+    font-size: 13px;
+  }
+}
+
+/* Ensure modal stays on top of everything */
+.upload-progress-backdrop,
+.upload-progress-modal {
+  pointer-events: auto;
+}
+
+body.upload-progress-open {
+  overflow: hidden;
+}

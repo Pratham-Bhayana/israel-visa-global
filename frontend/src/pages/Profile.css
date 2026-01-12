@@ -627,6 +627,51 @@
   font-style: italic;
 }
 
+/* Admin Notes Box */
+.admin-notes-box {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border-left: 4px solid #F59E0B;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-top: 1rem;
+}
+
+.admin-notes-box h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #F59E0B;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.admin-note-item {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.admin-note-item:last-child {
+  margin-bottom: 0;
+}
+
+.admin-note-item p {
+  font-size: 0.95rem;
+  color: var(--dark-text);
+  line-height: 1.6;
+  margin: 0 0 0.5rem 0;
+}
+
+.note-date {
+  display: block;
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
 /* Document Upload Box */
 .document-upload-box {
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);

@@ -335,7 +335,7 @@ const ApplicationDetails = () => {
               <div className="info-item">
                 <span className="info-label">Visa Type</span>
                 <span className="info-value">
-                  {application.visaType?.charAt(0).toUpperCase() + application.visaType?.slice(1) || 'N/A'}
+                  {application.visaType?.name || (application.visaType?.charAt(0).toUpperCase() + application.visaType?.slice(1)) || 'N/A'}
                 </span>
               </div>
               <div className="info-item">
@@ -419,62 +419,67 @@ const ApplicationDetails = () => {
                 Additional Documents (User Uploaded)
               </h2>
               <div className="additional-docs-list">
-                {application.additionalDocuments.map((doc, index) => {
-                  // Debug: Log document structure
-                  console.log('Document:', doc);
-                  
-                  // Determine the correct URL for the document
-                  let documentUrl;
-                  if (doc.path && doc.path.startsWith('http')) {
-                    // It's already a full URL (Cloudinary)
-                    documentUrl = doc.path;
-                  } else if (doc.path && doc.path.startsWith('/uploads')) {
-                    // It's a relative path to backend uploads folder
-                    documentUrl = `${API_URL}${doc.path}`;
-                  } else if (doc.path) {
-                    // It's just a filename, construct backend URL
-                    documentUrl = `${API_URL}/uploads/additional-documents/${doc.path}`;
-                  } else if (doc.filename) {
-                    // Fallback to filename
-                    documentUrl = `${API_URL}/uploads/additional-documents/${doc.filename}`;
-                  } else {
-                    // No valid path found
-                    console.error('No valid path for document:', doc);
-                    documentUrl = '#';
-                  }
-                  
-                  return (
-                    <div key={index} className="additional-doc-item">
-                      <div className="doc-info">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-                          <polyline points="13 2 13 9 20 9"/>
-                        </svg>
-                        <div>
-                          <span className="doc-name">{doc.originalName || doc.filename}</span>
-                          <span className="doc-meta">
-                            {doc.size ? `${(doc.size / 1024 / 1024).toFixed(2)} MB • ` : ''}
-                            {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : ''}
-                          </span>
+                {application.additionalDocuments && application.additionalDocuments.length > 0 ? (
+                  application.additionalDocuments.map((doc, index) => {
+                    // Debug: Log document structure
+                    console.log('Document:', JSON.stringify(doc, null, 2));
+                    
+                    // Determine the correct URL for the document
+                    let documentUrl;
+                    
+                    if (!doc.path && !doc.filename) {
+                      console.error('Document has no path or filename:', doc);
+                      documentUrl = '#';
+                    } else if (doc.path && (doc.path.startsWith('http://') || doc.path.startsWith('https://'))) {
+                      // It's already a full URL (Cloudinary)
+                      documentUrl = doc.path;
+                      console.log('Using Cloudinary URL:', documentUrl);
+                    } else if (doc.path && doc.path.startsWith('/uploads')) {
+                      // It's a relative path to backend uploads folder
+                      documentUrl = `${API_URL}${doc.path}`;
+                      console.log('Using backend relative path:', documentUrl);
+                    } else {
+                      // It's just a filename or invalid path, construct backend URL
+                      const filename = doc.path || doc.filename;
+                      documentUrl = `${API_URL}/uploads/additional-documents/${filename}`;
+                      console.log('Constructed backend URL:', documentUrl);
+                    }
+                    
+                    return (
+                      <div key={index} className="additional-doc-item">
+                        <div className="doc-info">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                            <polyline points="13 2 13 9 20 9"/>
+                          </svg>
+                          <div>
+                            <span className="doc-name">{doc.originalName || doc.filename || 'Document'}</span>
+                            <span className="doc-meta">
+                              {doc.size ? `${(doc.size / 1024 / 1024).toFixed(2)} MB • ` : ''}
+                              {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString() : ''}
+                            </span>
+                          </div>
                         </div>
+                        <a
+                          href={documentUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-view-doc"
+                          onClick={(e) => {
+                            if (documentUrl === '#') {
+                              e.preventDefault();
+                              alert('Document URL not available. Please check console for details.');
+                            }
+                          }}
+                        >
+                          View
+                        </a>
                       </div>
-                      <a
-                        href={documentUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-view-doc"
-                        onClick={(e) => {
-                          if (documentUrl === '#') {
-                            e.preventDefault();
-                            alert('Document URL not available');
-                          }
-                        }}
-                      >
-                        View
-                      </a>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                ) : (
+                  <p className="no-documents">No additional documents uploaded</p>
+                )}
               </div>
             </motion.div>
           )}

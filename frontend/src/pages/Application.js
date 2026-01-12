@@ -8,6 +8,7 @@ import { FaPlane, FaBriefcase, FaGraduationCap, FaSuitcase, FaUserMd, FaClock } 
 import { useAuth } from '../contexts/AuthContext';
 import passportOCR from '../services/ocrService';
 import EligibilityModal from '../components/EligibilityModal';
+import UploadProgress from '../components/UploadProgress';
 import './Application.css';
 
 const Application = () => {
@@ -16,6 +17,8 @@ const Application = () => {
   const { currentUser } = useAuth();
   const [countrySelection, setCountrySelection] = React.useState('');
   const [step, setStep] = React.useState(0);
+  const [showUploadProgress, setShowUploadProgress] = React.useState(false);
+  const [uploadProgress, setUploadProgress] = React.useState([]);
   
   // Check for country parameter in URL
   React.useEffect(() => {
@@ -428,6 +431,61 @@ const Application = () => {
     }
   };
 
+  // Upload file to Cloudinary
+  const uploadFileToCloudinary = async (file, fieldName, label) => {
+    if (!file) return null;
+    
+    // Update progress to uploading
+    setUploadProgress(prev =>
+      prev.map(item =>
+        item.name === fieldName ? { ...item, status: 'uploading' } : item
+      )
+    );
+    
+    try {
+      const formDataToUpload = new FormData();
+      formDataToUpload.append('file', file);
+      formDataToUpload.append('folder', 'israel-visa/documents');
+      
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/upload`,
+        formDataToUpload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${await currentUser.getIdToken()}`,
+          },
+        }
+      );
+      
+      if (response.data.success) {
+        console.log(`✅ Uploaded ${fieldName}:`, response.data.data.url);
+        
+        // Update progress to completed
+        setUploadProgress(prev =>
+          prev.map(item =>
+            item.name === fieldName ? { ...item, status: 'completed' } : item
+          )
+        );
+        
+        return response.data.data.url;
+      }
+      
+      throw new Error('Upload failed');
+    } catch (error) {
+      console.error(`Failed to upload ${fieldName}:`, error);
+      
+      // Update progress to error
+      setUploadProgress(prev =>
+        prev.map(item =>
+          item.name === fieldName ? { ...item, status: 'error' } : item
+        )
+      );
+      
+      throw error;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -440,6 +498,57 @@ const Application = () => {
     setIsSubmitting(true);
     
     try {
+      // Prepare document fields with labels (including passport front/back)
+      const documentFields = [
+        { name: 'passportFront', label: 'Passport Front' },
+        { name: 'passportBack', label: 'Passport Back' },
+        { name: 'passportAllPages', label: 'Passport Pages' },
+        { name: 'photograph', label: 'Photograph' },
+        { name: 'requestLetter', label: 'Request Letter' },
+        { name: 'nocEmployer', label: 'NOC from Employer' },
+        { name: 'salarySlips', label: 'Salary Slips' },
+        { name: 'itinerary', label: 'Travel Itinerary' },
+        { name: 'hotelBooking', label: 'Hotel Booking' },
+        { name: 'ticket', label: 'Ticket Reservation' },
+        { name: 'travelInsurance', label: 'Travel Insurance' },
+        { name: 'bankStatement', label: 'Bank Statement' },
+        { name: 'aadharCard', label: 'Aadhar Card' },
+        { name: 'itr', label: 'ITR Certificate' },
+      ];
+      
+      // Initialize progress tracker with only files that need upload
+      const filesToUpload = documentFields.filter(
+        field => formData[field.name] && formData[field.name] instanceof File
+      );
+      
+      // Upload all document files to Cloudinary
+      let documentUrls = {};
+      
+      if (filesToUpload.length > 0) {
+        setUploadProgress(
+          filesToUpload.map(field => ({
+            name: field.name,
+            label: field.label,
+            status: 'pending',
+          }))
+        );
+        setShowUploadProgress(true);
+        
+        for (const field of filesToUpload) {
+          const url = await uploadFileToCloudinary(
+            formData[field.name],
+            field.name,
+            field.label
+          );
+          documentUrls[field.name] = url;
+        }
+        
+        console.log('Uploaded document URLs:', documentUrls);
+        
+        // Wait a moment to show completion
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      
       // Helper to convert yyyy-mm-dd to Date object
       const parseDate = (dateStr) => {
         if (!dateStr) return null;
@@ -463,13 +572,13 @@ const Application = () => {
         gender: formData.gender?.toLowerCase() || null,
         passportIssueDate: parseDate(formData.dateOfIssue),
         passportExpiryDate: parseDate(formData.dateOfExpiry),
-        passportFront: formData.passportFront?.name || null,
-        passportBack: formData.passportBack?.name || null,
+        passportFront: documentUrls.passportFront || null,
+        passportBack: documentUrls.passportBack || null,
         
         // Travel Information
         travelPurpose: formData.visitPurpose || null,
         travelStartDate: parseDate(formData.arrivalDate),
-        travelEndDate: formData.stayDuration || null, // This should be a date too if needed
+        travelEndDate: formData.departureDate ? parseDate(formData.departureDate) : null,
         previousVisa: formData.previousVisaApproved || null, // Keep as 'yes'/'no' string
         multipleEntry: formData.multipleEntry || null, // Keep as 'yes'/'no' string
         placesToVisit: formData.placesToVisit 
@@ -492,20 +601,20 @@ const Application = () => {
         maritalStatus: formData.maritalStatus || null,
         spouseName: formData.spouseName || null,
         
-        // Documents (store file names for now, upload to cloud storage later)
+        // Documents (store Cloudinary URLs)
         documents: {
-          passportPages: formData.passportAllPages?.name || null,
-          photo: formData.photograph?.name || null,
-          requestLetter: formData.requestLetter?.name || null,
-          noc: formData.nocEmployer?.name || null,
-          salarySlips: formData.salarySlips?.name || null,
-          itinerary: formData.itinerary?.name || null,
-          hotelBooking: formData.hotelBooking?.name || null,
-          ticketReservation: formData.ticket?.name || null,
-          travelInsurance: formData.travelInsurance?.name || null,
-          bankStatement: formData.bankStatement?.name || null,
-          aadharCard: formData.aadharCard?.name || null,
-          itrCertificate: formData.itr?.name || null,
+          passportPages: documentUrls.passportAllPages || null,
+          photo: documentUrls.photograph || null,
+          requestLetter: documentUrls.requestLetter || null,
+          noc: documentUrls.nocEmployer || null,
+          salarySlips: documentUrls.salarySlips || null,
+          itinerary: documentUrls.itinerary || null,
+          hotelBooking: documentUrls.hotelBooking || null,
+          ticketReservation: documentUrls.ticket || null,
+          travelInsurance: documentUrls.travelInsurance || null,
+          bankStatement: documentUrls.bankStatement || null,
+          aadharCard: documentUrls.aadharCard || null,
+          itrCertificate: documentUrls.itr || null,
         },
         
         // Payment Information
@@ -531,7 +640,10 @@ const Application = () => {
       );
 
       if (response.data.success) {
-        toast.success('Application saved successfully! Redirecting to payment...');
+        toast.success('Application submitted successfully! Redirecting to payment...');
+        
+        // Close upload progress modal
+        setShowUploadProgress(false);
         
         // Redirect to payment page with application ID
         setTimeout(() => {
@@ -540,6 +652,11 @@ const Application = () => {
       }
     } catch (error) {
       console.error('Application submission error:', error);
+      console.error('Error details:', error.response?.data);
+      
+      // Close upload progress modal
+      setShowUploadProgress(false);
+      
       toast.error(error.response?.data?.message || 'Failed to submit application. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -2307,6 +2424,12 @@ const Application = () => {
       <EligibilityModal 
         isOpen={showEligibilityModal} 
         onClose={() => setShowEligibilityModal(false)} 
+      />
+      
+      {/* Upload Progress Modal */}
+      <UploadProgress 
+        isOpen={showUploadProgress}
+        uploadProgress={uploadProgress}
       />
     </>
   );
