@@ -16,23 +16,34 @@ const server = http.createServer(app);
 
 // Configure allowed origins
 const getAllowedOrigins = () => {
+  // Always include production domains as fallback
+  const productionDomains = [
+    'https://indoisraelvisa.com',
+    'https://www.indoisraelvisa.com'
+  ];
+  
   if (process.env.NODE_ENV === 'production') {
     // Support comma-separated multiple origins in production
-    const origins = process.env.FRONTEND_URL 
-      ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-      : ['https://indoisraelvisa.com', 'https://www.indoisraelvisa.com']; // Fallback to production domains
+    let origins = process.env.FRONTEND_URL 
+      ? process.env.FRONTEND_URL.split(',').map(url => url.trim().replace(/\/$/, '')) // Remove trailing slashes
+      : [];
     
-    // Ensure our production domain is always included
-    const productionDomains = ['https://indoisraelvisa.com', 'https://www.indoisraelvisa.com'];
+    // Combine with production domains and remove duplicates
     const allOrigins = [...new Set([...origins, ...productionDomains])];
     
     console.log('Allowed origins in production:', allOrigins);
     return allOrigins;
   }
-  return [
-    process.env.FRONTEND_URL || 'http://localhost:3000', 
-    'http://localhost:3001'
+  
+  // Development mode
+  const devOrigins = [
+    process.env.FRONTEND_URL?.replace(/\/$/, '') || 'http://localhost:3000',
+    'http://localhost:3001',
+    ...productionDomains // Also allow production domains in dev for testing
   ];
+  
+  console.log('Allowed origins in development:', devOrigins);
+  return devOrigins;
 };
 
 const allowedOrigins = getAllowedOrigins();
