@@ -20,8 +20,14 @@ const getAllowedOrigins = () => {
     // Support comma-separated multiple origins in production
     const origins = process.env.FRONTEND_URL 
       ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-      : [];
-    return origins;
+      : ['https://indoisraelvisa.com', 'https://www.indoisraelvisa.com']; // Fallback to production domains
+    
+    // Ensure our production domain is always included
+    const productionDomains = ['https://indoisraelvisa.com', 'https://www.indoisraelvisa.com'];
+    const allOrigins = [...new Set([...origins, ...productionDomains])];
+    
+    console.log('Allowed origins in production:', allOrigins);
+    return allOrigins;
   }
   return [
     process.env.FRONTEND_URL || 'http://localhost:3000', 
@@ -99,6 +105,17 @@ app.get('/api/health', (req, res) => {
     success: true,
     message: 'Server is running',
     timestamp: new Date().toISOString(),
+  });
+});
+
+// CORS debug endpoint
+app.get('/api/cors-debug', (req, res) => {
+  res.status(200).json({
+    success: true,
+    allowedOrigins: allowedOrigins,
+    requestOrigin: req.headers.origin,
+    nodeEnv: process.env.NODE_ENV,
+    frontendUrl: process.env.FRONTEND_URL,
   });
 });
 
