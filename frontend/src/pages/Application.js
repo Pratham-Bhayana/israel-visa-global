@@ -1706,7 +1706,7 @@ supportingDocuments: [],
               </label>
             )}
 
-            {/* ➕ PLUS (ALWAYS VISIBLE) */}
+            {/*  PLUS  */}
             <label htmlFor={`${doc.id}-plus`} className="upload-plus-btn">
               <input
                 type="file"
