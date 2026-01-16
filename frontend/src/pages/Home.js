@@ -124,7 +124,7 @@ const Home = () => {
           content="Apply for your Israel visa online. Fast, secure, and hassle-free visa application process. Track your application status in real-time. 24/7 support available."
         />
         <meta name="keywords" content="Israel visa, visa application, Israel travel, tourist visa, business visa, student visa" />
-        <link rel="canonical" href="https://yourdomain.com/" />
+        <link rel="canonical" href="https://indoisraelvisa.com/" />
         
         {/* Schema.org markup for Organization */}
         <script type="application/ld+json">
@@ -132,8 +132,8 @@ const Home = () => {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Israel Visa Application",
-            "url": "https://yourdomain.com",
-            "logo": "https://yourdomain.com/logo.png",
+            "url": "https://indoisraelvisa.com/",
+            "logo": "https://res.cloudinary.com/dl99np8d8/image/upload/v1767933071/RES_VISA_LOGO_reoumf.png",
             "description": "Official Israel visa application portal",
             "address": {
               "@type": "PostalAddress",
@@ -449,6 +449,7 @@ const Home = () => {
                   className="btn btn-primary btn-large"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  style={{backgroundColor: '#00038B'}}
                 >
                   Apply for Visa Now
                 </motion.button>

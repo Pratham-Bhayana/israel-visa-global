@@ -4,7 +4,7 @@ Disallow: /admin
 Disallow: /admin/*
 Allow: /
 
-Sitemap: https://israel-visa-global.netlify.app/sitemap.xml
+Sitemap: https://indoisraelvisa.com/sitemap.xml
 
 # AI Crawlers
 User-agent: GPTBot
@@ -22,4 +22,4 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://indoisraelvisa.com/sitemap.xml

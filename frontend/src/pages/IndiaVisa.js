@@ -601,7 +601,7 @@ const IndiaVisa = () => {
             <h2>Ready to Visit India?</h2>
             <p>Start your India e-Visa application now and get approved in 3-5 days</p>
             <motion.button
-              className="btn-primary-india large"
+              className="btn-primary btn-primary-india large"
               whileHover={{ scale: 1.05, boxShadow: '0 15px 50px rgba(255, 153, 0, 0.5)' }}
               whileTap={{ scale: 0.95 }}
             >
