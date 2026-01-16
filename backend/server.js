@@ -14,12 +14,44 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// Configure allowed origins
+const getAllowedOrigins = () => {
+  // Always include production domains as fallback
+  const productionDomains = [
+    'https://indoisraelvisa.com',
+    'https://www.indoisraelvisa.com'
+  ];
+  
+  if (process.env.NODE_ENV === 'production') {
+    // Support comma-separated multiple origins in production
+    let origins = process.env.FRONTEND_URL 
+      ? process.env.FRONTEND_URL.split(',').map(url => url.trim().replace(/\/$/, '')) // Remove trailing slashes
+      : [];
+    
+    // Combine with production domains and remove duplicates
+    const allOrigins = [...new Set([...origins, ...productionDomains])];
+    
+    console.log('Allowed origins in production:', allOrigins);
+    return allOrigins;
+  }
+  
+  // Development mode
+  const devOrigins = [
+    process.env.FRONTEND_URL?.replace(/\/$/, '') || 'http://localhost:3000',
+    'http://localhost:3001',
+    ...productionDomains // Also allow production domains in dev for testing
+  ];
+  
+  console.log('Allowed origins in development:', devOrigins);
+  return devOrigins;
+};
+
+const allowedOrigins = getAllowedOrigins();
+
 // Initialize Socket.io
 const io = socketIo(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
-      ? [process.env.FRONTEND_URL]
-      : [process.env.FRONTEND_URL || 'http://localhost:3000', 'http://localhost:3001'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true,
   },
@@ -31,9 +63,7 @@ app.use(helmet({
   contentSecurityPolicy: false,
 })); // Security headers
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://indoisraelvisa.com']
-    : [process.env.FRONTEND_URL || 'http://localhost:3000', 'http://localhost:3001'],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-user-email', 'x-user-name', 'x-user-uid'],
@@ -86,6 +116,17 @@ app.get('/api/health', (req, res) => {
     success: true,
     message: 'Server is running',
     timestamp: new Date().toISOString(),
+  });
+});
+
+// CORS debug endpoint
+app.get('/api/cors-debug', (req, res) => {
+  res.status(200).json({
+    success: true,
+    allowedOrigins: allowedOrigins,
+    requestOrigin: req.headers.origin,
+    nodeEnv: process.env.NODE_ENV,
+    frontendUrl: process.env.FRONTEND_URL,
   });
 });
 

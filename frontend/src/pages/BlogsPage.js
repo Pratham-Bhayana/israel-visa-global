@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import './BlogsPage.css';
@@ -66,7 +67,51 @@ const BlogsPage = () => {
   }
 
   return (
-    <div className="blogs-page-container">
+    <>
+      <Helmet>
+        <title>Israel Visa Blog - Complete Guide to Israel Visa Application & Travel Tips</title>
+        <meta
+          name="description"
+          content="Read our comprehensive Israel visa blog for application guides, requirements, tips, and the latest visa news. Everything you need for a successful Israel visa application."
+        />
+        <meta name="keywords" content="Israel visa blog, visa guide, Israel visa requirements, visa application tips, Israel travel blog" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`} />
+        
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Israel Visa Blog - Complete Guide & Travel Tips" />
+        <meta property="og:description" content="Read our comprehensive Israel visa blog for application guides, requirements, tips, and news." />
+        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`} />
+        
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Israel Visa Blog - Complete Guide & Travel Tips" />
+        <meta name="twitter:description" content="Read our comprehensive Israel visa blog for application guides, requirements, tips, and news." />
+        
+        {/* Breadcrumb Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`
+              }
+            ]
+          })}
+        </script>
+      </Helmet>
+      
+      <div className="blogs-page-container">
       {/* Hero Section */}
       <div className="blogs-hero">
         <h1>Israel Visa Blog</h1>
@@ -240,6 +285,7 @@ const BlogsPage = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

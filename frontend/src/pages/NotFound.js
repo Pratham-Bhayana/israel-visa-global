@@ -8,8 +8,10 @@ const NotFound = () => {
   return (
     <>
       <Helmet>
-        <title>Page Not Found - Israel Visa Application</title>
-        <meta name="description" content="The page you are looking for could not be found" />
+        <title>404 Page Not Found - Israel Visa Application Portal</title>
+        <meta name="description" content="The page you are looking for could not be found. Return to Israel Visa Application homepage or explore our visa services." />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`} />
       </Helmet>
 
       <div className="notfound-page">

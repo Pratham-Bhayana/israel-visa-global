@@ -199,8 +199,10 @@ const Profile = () => {
   return (
     <>
       <Helmet>
-        <title>My Profile - Israel Visa Application</title>
-        <meta name="description" content="View your profile and visa application status" />
+        <title>My Profile - Israel Visa Application Status & Dashboard</title>
+        <meta name="description" content="View and track your Israel visa application status, manage documents, and update profile information. Check real-time visa processing updates." />
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/profile`} />
       </Helmet>
 
       <div className="profile-page">
@@ -288,7 +290,7 @@ const Profile = () => {
                   <div key={app._id} className="payment-pending-card">
                     <div className="payment-card-header">
                       <div className="payment-app-info">
-                        <h3>{app.visaType?.charAt(0).toUpperCase() + app.visaType?.slice(1)} Visa</h3>
+                        <h3>{app.visaType?.name || (app.visaType?.charAt(0).toUpperCase() + app.visaType?.slice(1) + ' Visa')}</h3>
                         <span className="app-id">{app.applicationNumber}</span>
                         <span className="app-date">
                           Saved: {new Date(app.createdAt).toLocaleDateString()}
@@ -330,7 +332,7 @@ const Profile = () => {
                   >
                     <div className="app-card-header">
                       <div className="app-info">
-                        <h3>{app.visaType?.charAt(0).toUpperCase() + app.visaType?.slice(1)} Visa</h3>
+                        <h3>{app.visaType?.name || (app.visaType?.charAt(0).toUpperCase() + app.visaType?.slice(1) + ' Visa')}</h3>
                         <span className="app-id">{app.applicationNumber}</span>
                         <span className="app-date">
                           Applied: {new Date(app.submittedAt || app.createdAt).toLocaleDateString()}
@@ -389,6 +391,20 @@ const Profile = () => {
                             <span className="remark-date">
                               {new Date(app.statusHistory[app.statusHistory.length - 1].changedAt).toLocaleString()}
                             </span>
+                          </div>
+                        )}
+
+                        {app.adminNotes && app.adminNotes.length > 0 && (
+                          <div className="admin-notes-box">
+                            <h4>📝 Admin Notes</h4>
+                            {app.adminNotes.map((note, idx) => (
+                              <div key={idx} className="admin-note-item">
+                                <p>{note.note}</p>
+                                <span className="note-date">
+                                  {new Date(note.createdAt).toLocaleString()}
+                                </span>
+                              </div>
+                            ))}
                           </div>
                         )}
 

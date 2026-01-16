@@ -41,8 +41,11 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Login - Israel Visa Application</title>
-        <meta name="description" content="Login to your Israel visa application account" />
+        <title>Login to Your Account - Israel Visa Application Portal</title>
+        <meta name="description" content="Login to your Israel visa application account. Track your visa application status, manage documents, and receive real-time updates." />
+        <meta name="keywords" content="Israel visa login, visa application login, track visa status" />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/login`} />
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <div className="auth-page">

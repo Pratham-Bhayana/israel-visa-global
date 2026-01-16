@@ -28,6 +28,7 @@ router.get('/dashboard', async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(10)
       .populate('userId', 'email displayName')
+      .populate('visaType', 'name category')
       .select('applicationNumber fullName status createdAt visaType');
 
     // Applications by visa type
@@ -109,7 +110,8 @@ router.get('/applications', async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .populate('userId', 'email displayName');
+      .populate('userId', 'email displayName')
+      .populate('visaType', 'name category');
 
     const total = await Application.countDocuments(query);
 
@@ -139,6 +141,7 @@ router.get('/applications/:id', async (req, res) => {
   try {
     const application = await Application.findById(req.params.id)
       .populate('userId', 'email displayName phoneNumber')
+      .populate('visaType', 'name category description')
       .populate('adminNotes.addedBy', 'displayName')
       .populate('statusHistory.changedBy', 'displayName');
 

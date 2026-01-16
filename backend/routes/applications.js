@@ -79,6 +79,7 @@ router.post('/', protect, async (req, res) => {
 router.get('/', protect, async (req, res) => {
   try {
     const applications = await Application.find({ userId: req.user.id })
+      .populate('visaType', 'name category')
       .sort({ createdAt: -1 })
       .select('-__v');
 

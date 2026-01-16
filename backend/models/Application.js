@@ -21,8 +21,9 @@ const applicationSchema = new mongoose.Schema(
     
     // Step 1: Visa Type
     visaType: {
-      type: String,
-      default: '',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'VisaType',
+      required: true,
     },
     
     // Step 2: Passport Information

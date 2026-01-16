@@ -235,6 +235,17 @@ const Home = () => {
         <section className="features-section">
           <div className="container">
             <motion.div
+              className="section-header"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2>Why Choose Our Israel Visa Application Service</h2>
+              <p>Fast, secure, and reliable visa processing with expert support</p>
+            </motion.div>
+            
+            <motion.div
               className="features-grid"
               initial="hidden"
               whileInView="visible"
