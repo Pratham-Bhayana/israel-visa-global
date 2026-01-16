@@ -22,4 +22,4 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
-Sitemap: https://indoisraelvisa.com/sitemap.xml
+
