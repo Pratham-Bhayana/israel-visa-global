@@ -36,6 +36,8 @@ const Application = () => {
   const [indiaVisaTypes, setIndiaVisaTypes] = React.useState([]);
   const [selectedVisaFee, setSelectedVisaFee] = React.useState(null);
   const [showEligibilityModal, setShowEligibilityModal] = React.useState(false);
+  const [showExpiryWarningModal, setShowExpiryWarningModal] = React.useState(false);
+  const [expiryWarning, setExpiryWarning] = React.useState({ isExpired: false, daysUntilExpiry: 0 });
   
   // Check for e-visa eligibility data on load
   React.useEffect(() => {
@@ -250,33 +252,89 @@ supportingDocuments: [],
       const selectedVisa = visaTypes.find(vt => vt.slug === value);
       setSelectedVisaFee(selectedVisa ? selectedVisa.fee.inr : null);
     }
+
+    // Check passport expiry when date changes
+    if (name === 'dateOfExpiry' && value) {
+      checkPassportExpiry(value);
+    }
+  };
+
+  const checkPassportExpiry = (expiryDate) => {
+    if (!expiryDate) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const expiry = new Date(expiryDate);
+    expiry.setHours(0, 0, 0, 0);
+    
+    const sixMonthsFromNow = new Date(today);
+    sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
+    
+    const diffTime = expiry - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (expiry < today) {
+      // Passport is expired
+      setExpiryWarning({ isExpired: true, daysUntilExpiry: diffDays });
+      setShowExpiryWarningModal(true);
+    } else if (expiry < sixMonthsFromNow) {
+      // Passport expires within 6 months
+      setExpiryWarning({ isExpired: false, daysUntilExpiry: diffDays });
+      setShowExpiryWarningModal(true);
+    } else {
+      setExpiryWarning({ isExpired: false, daysUntilExpiry: diffDays });
+    }
   };
 
   const handleFileChange = async (e) => {
     const fieldName = e.target.name;
-  const file = Array.from(e.target.files);
+    const newFiles = Array.from(e.target.files);
+    const file = newFiles[0]; // Get the first file for OCR
     
-    if (file) {
-      // Store file immediately
-      setFormData(prev => ({
-        ...prev,
-        [fieldName]: file,
-      }));
+    if (newFiles.length > 0) {
+      // For passport fields (single file) or multi-file document fields
+      const isPassportField = fieldName === 'passportFront' || fieldName === 'passportBack';
+      
+      if (isPassportField) {
+        // Single file upload for passport
+        setFormData(prev => ({
+          ...prev,
+          [fieldName]: newFiles,
+        }));
+      } else {
+        // Multiple file upload for other documents - append to existing
+        setFormData(prev => {
+          const existingFiles = prev[fieldName] || [];
+          const combinedFiles = [...existingFiles, ...newFiles];
+          return {
+            ...prev,
+            [fieldName]: combinedFiles,
+          };
+        });
+        
+        toast.success(`${newFiles.length} file(s) added successfully!`);
+        // Reset input to allow uploading same file again
+        e.target.value = '';
+        return;
+      }
 
       // If passport front, trigger OCR processing
-      if (fieldName === 'passportFront') {
+      if (fieldName === 'passportFront' && file) {
         setIsUploading(true);
-        toast.info('Processing passport image...');
+        toast.info('Processing passport image... This may take a few seconds.', { autoClose: 3000 });
         
         try {
           const ocrResult = await passportOCR.processPassport(file);
+          
+          console.log('OCR Result:', ocrResult);
           
           if (!ocrResult.success) {
             setIsUploading(false);
             
             if (!ocrResult.isPassport) {
               // Not a valid passport
-              toast.error(ocrResult.message);
+              toast.error(ocrResult.message, { autoClose: 5000 });
               setFormData(prev => ({
                 ...prev,
                 passportFront: null,
@@ -285,14 +343,15 @@ supportingDocuments: [],
             }
             
             if (ocrResult.qualityIssue) {
-              // Quality issues
-              toast.warning(ocrResult.message);
-              // Allow user to continue but don't auto-fill
+              // Quality issues - allow to continue but warn
+              toast.warning(`${ocrResult.message} You can still proceed to fill manually.`, { autoClose: 7000 });
+              setIsUploading(false);
               return;
             }
             
-            // Other errors
-            toast.error(ocrResult.message || 'Failed to process passport image');
+            // Other errors - show error but allow manual filling
+            toast.error(`${ocrResult.message || 'Failed to process passport image'}. Please fill the form manually.`, { autoClose: 5000 });
+            setIsUploading(false);
             return;
           }
 
@@ -341,17 +400,36 @@ supportingDocuments: [],
             console.log(`${key}: ${finalValue} (confidence: ${confidence}%)`);
           });
 
-          setFormData(prev => ({
-            ...prev,
-            passportFront: file,
-            ...fieldsToUpdate
-          }));
+          console.log('Fields to update:', fieldsToUpdate);
+          
+          setFormData(prev => {
+            const newData = {
+              ...prev,
+              passportFront: newFiles,
+              ...fieldsToUpdate
+            };
+            console.log('Updated form data:', newData);
+            return newData;
+          });
+
+          // Check passport expiry if extracted
+          if (fieldsToUpdate.dateOfExpiry) {
+            checkPassportExpiry(fieldsToUpdate.dateOfExpiry);
+          }
+
+          setIsUploading(false);
 
           // Show summary message
           const highConfidenceFields = Object.keys(fieldsToUpdate).length;
-          toast.success(`✓ Passport detected! Auto-filled ${highConfidenceFields} fields. Please review carefully.`, {
-            autoClose: 5000
-          });
+          if (highConfidenceFields > 0) {
+            toast.success(`✓ Passport detected! Auto-filled ${highConfidenceFields} fields. Please review carefully.`, {
+              autoClose: 5000
+            });
+          } else {
+            toast.warning('Passport detected but could not extract data. Please fill manually.', {
+              autoClose: 5000
+            });
+          }
 
           // Show warnings for low confidence fields
           if (lowConfidenceFields.length > 0) {
@@ -365,8 +443,7 @@ supportingDocuments: [],
 
         } catch (error) {
           console.error('OCR Error:', error);
-          toast.error('An error occurred while processing the passport. Please fill manually.');
-        } finally {
+          toast.error('OCR service temporarily unavailable. Please fill the form manually.', { autoClose: 5000 });
           setIsUploading(false);
         }
       } else {
@@ -376,12 +453,26 @@ supportingDocuments: [],
     }
   };
 
-  const handleRemoveFile = (fieldName) => {
-    setFormData({
-      ...formData,
-      [fieldName]: null,
-    });
-    toast.info('File removed');
+  const handleRemoveFile = (fieldName, fileIndex = null) => {
+    if (fileIndex !== null) {
+      // Remove specific file from array
+      setFormData(prev => {
+        const filesArray = prev[fieldName] || [];
+        const newFiles = filesArray.filter((_, index) => index !== fileIndex);
+        return {
+          ...prev,
+          [fieldName]: newFiles.length > 0 ? newFiles : [],
+        };
+      });
+      toast.info('File removed');
+    } else {
+      // Remove all files
+      setFormData({
+        ...formData,
+        [fieldName]: [],
+      });
+      toast.info('All files removed');
+    }
   };
 
   const handleNext = () => {
@@ -514,33 +605,69 @@ supportingDocuments: [],
         { name: 'bankStatement', label: 'Bank Statement' },
         { name: 'aadharCard', label: 'Aadhar Card' },
         { name: 'itr', label: 'ITR Certificate' },
+        { name: 'additionalPassportPages', label: 'Additional Passport Pages' },
+        { name: 'supportingDocuments', label: 'Supporting Documents' },
       ];
       
       // Initialize progress tracker with only files that need upload
-      const filesToUpload = documentFields.filter(
-        field => formData[field.name] && formData[field.name] instanceof File
-      );
+      const filesToUpload = [];
+      documentFields.forEach(field => {
+        const fieldData = formData[field.name];
+        if (fieldData) {
+          if (Array.isArray(fieldData) && fieldData.length > 0) {
+            // Multiple files
+            fieldData.forEach((file, index) => {
+              if (file instanceof File) {
+                filesToUpload.push({
+                  ...field,
+                  file,
+                  index,
+                  displayLabel: fieldData.length > 1 ? `${field.label} (${index + 1}/${fieldData.length})` : field.label
+                });
+              }
+            });
+          } else if (fieldData instanceof File) {
+            // Single file
+            filesToUpload.push({
+              ...field,
+              file: fieldData,
+              displayLabel: field.label
+            });
+          }
+        }
+      });
       
       // Upload all document files to Cloudinary
       let documentUrls = {};
       
       if (filesToUpload.length > 0) {
         setUploadProgress(
-          filesToUpload.map(field => ({
-            name: field.name,
-            label: field.label,
+          filesToUpload.map((item, idx) => ({
+            name: `${item.name}-${idx}`, // Unique key for each file
+            originalName: item.name, // Keep original name for matching
+            label: item.displayLabel,
             status: 'pending',
           }))
         );
         setShowUploadProgress(true);
         
-        for (const field of filesToUpload) {
+        for (let i = 0; i < filesToUpload.length; i++) {
+          const item = filesToUpload[i];
           const url = await uploadFileToCloudinary(
-            formData[field.name],
-            field.name,
-            field.label
+            item.file,
+            `${item.name}-${i}`, // Pass unique name for progress tracking
+            item.displayLabel
           );
-          documentUrls[field.name] = url;
+          
+          // For multiple files, store as array of URLs
+          if (item.index !== undefined) {
+            if (!documentUrls[item.name]) {
+              documentUrls[item.name] = [];
+            }
+            documentUrls[item.name].push(url);
+          } else {
+            documentUrls[item.name] = url;
+          }
         }
         
         console.log('Uploaded document URLs:', documentUrls);
@@ -572,8 +699,9 @@ supportingDocuments: [],
         gender: formData.gender?.toLowerCase() || null,
         passportIssueDate: parseDate(formData.dateOfIssue),
         passportExpiryDate: parseDate(formData.dateOfExpiry),
-        passportFront: documentUrls.passportFront || null,
-        passportBack: documentUrls.passportBack || null,
+        // Passport front/back should be single strings, not arrays
+        passportFront: Array.isArray(documentUrls.passportFront) ? documentUrls.passportFront[0] : documentUrls.passportFront || null,
+        passportBack: Array.isArray(documentUrls.passportBack) ? documentUrls.passportBack[0] : documentUrls.passportBack || null,
         
         // Travel Information
         travelPurpose: formData.visitPurpose || null,
@@ -615,6 +743,8 @@ supportingDocuments: [],
           bankStatement: documentUrls.bankStatement || null,
           aadharCard: documentUrls.aadharCard || null,
           itrCertificate: documentUrls.itr || null,
+          additionalPassportPages: documentUrls.additionalPassportPages || null,
+          supportingDocuments: documentUrls.supportingDocuments || null,
         },
         
         // Payment Information
@@ -1171,7 +1301,19 @@ supportingDocuments: [],
 
                           <div className="form-field">
                             <label>Date of Expiry *</label>
-                            <input type="date" name="dateOfExpiry" value={formData.dateOfExpiry} onChange={handleChange} required />
+                            <input 
+                              type="date" 
+                              name="dateOfExpiry" 
+                              value={formData.dateOfExpiry} 
+                              onChange={handleChange} 
+                              required 
+                              className={expiryWarning.isExpired || (expiryWarning.daysUntilExpiry < 180 && expiryWarning.daysUntilExpiry > 0) ? 'expiry-warning' : ''}
+                            />
+                            {(expiryWarning.isExpired || (expiryWarning.daysUntilExpiry < 180 && expiryWarning.daysUntilExpiry > 0)) && (
+                              <span className="expiry-warning-text">
+                                {expiryWarning.isExpired ? '⚠️ Passport expired' : `⚠️ Expires in ${expiryWarning.daysUntilExpiry} days`}
+                              </span>
+                            )}
                           </div>
 
                           <div className="form-field">
@@ -1338,7 +1480,19 @@ supportingDocuments: [],
 
                           <div className="form-field">
                             <label>Date of Expiry *</label>
-                            <input type="date" name="dateOfExpiry" value={formData.dateOfExpiry} onChange={handleChange} required />
+                            <input 
+                              type="date" 
+                              name="dateOfExpiry" 
+                              value={formData.dateOfExpiry} 
+                              onChange={handleChange} 
+                              required 
+                              className={expiryWarning.isExpired || (expiryWarning.daysUntilExpiry < 180 && expiryWarning.daysUntilExpiry > 0) ? 'expiry-warning' : ''}
+                            />
+                            {(expiryWarning.isExpired || (expiryWarning.daysUntilExpiry < 180 && expiryWarning.daysUntilExpiry > 0)) && (
+                              <span className="expiry-warning-text">
+                                {expiryWarning.isExpired ? '⚠️ Passport expired' : `⚠️ Expires in ${expiryWarning.daysUntilExpiry} days`}
+                              </span>
+                            )}
                           </div>
 
                           <div className="form-field">
@@ -1836,79 +1990,73 @@ supportingDocuments: [],
             <label className="document-label">{doc.label}</label>
           </div>
 
-          {/* UPLOAD (ONLY FIRST TIME) + PLUS (ALWAYS) */}
-          <div className="upload-with-plus">
+          {/* File List - Show all uploaded files */}
+          {formData[doc.id] && formData[doc.id].length > 0 && (
+            <div className="files-list">
+              {formData[doc.id].map((file, fileIndex) => (
+                <div key={fileIndex} className="file-item">
+                  <div className="file-item-icon">
+                    {file.type && file.type.includes('pdf') ? (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                      </svg>
+                    ) : (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                      </svg>
+                    )}
+                  </div>
+                  <span className="file-item-name" title={file.name}>
+                    {file.name.length > 25 ? file.name.substring(0, 22) + '...' : file.name}
+                  </span>
+                  <span className="file-item-size">
+                    {(file.size / 1024).toFixed(1)} KB
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFile(doc.id, fileIndex)}
+                    className="file-item-remove"
+                    title="Remove this file"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
-            {/* Upload only when no file */}
-            {(!formData[doc.id] || formData[doc.id].length === 0) && (
-              <label htmlFor={doc.id} className="document-upload-box">
-                <input
-                  type="file"
-                  id={doc.id}
-                  name={doc.id}
-                  onChange={handleFileChange}
-                  accept="image/*,.pdf"
-                  hidden
-                  required={doc.required}
-                />
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                </svg>
-                <span>Upload</span>
-              </label>
-            )}
-
-            {/*  PLUS  */}
-            <label htmlFor={`${doc.id}-plus`} className="upload-plus-btn">
+          {/* Upload Button */}
+          <div className="upload-actions">
+            <label htmlFor={doc.id} className="upload-btn">
               <input
                 type="file"
-                id={`${doc.id}-plus`}
+                id={doc.id}
                 name={doc.id}
                 onChange={handleFileChange}
                 accept="image/*,.pdf"
                 hidden
                 multiple
+                required={doc.required && (!formData[doc.id] || formData[doc.id].length === 0)}
               />
-              +
-            </label>
-
-          </div>
-
-          {/* AFTER UPLOAD INFO */}
-          {formData[doc.id] && formData[doc.id].length > 0 && (
-            <div className="document-uploaded">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5">
-                <polyline points="20 6 9 17 4 12" />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
               </svg>
-
-              {/* ✅ FILE COUNT (FIXED) */}
-              <span className="document-uploaded-name">
-                {formData[doc.id].length} file(s) uploaded
-              </span>
-
-              <div className="document-actions">
-                <label htmlFor={doc.id} className="doc-action-link">
-                  <input
-                    type="file"
-                    id={doc.id}
-                    name={doc.id}
-                    onChange={handleFileChange}
-                    accept="image/*,.pdf"
-                    hidden
-                  />
-                  Change
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() => handleRemoveFile(doc.id)}
-                  className="doc-action-link"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          )}
+              <span>{formData[doc.id] && formData[doc.id].length > 0 ? 'Add More Files' : 'Upload Files'}</span>
+            </label>
+            
+            {formData[doc.id] && formData[doc.id].length > 0 && (
+              <button
+                type="button"
+                onClick={() => handleRemoveFile(doc.id)}
+                className="remove-all-btn"
+              >
+                Remove All
+              </button>
+            )}
+          </div>
 
         </div>
       ))}
@@ -2511,6 +2659,50 @@ supportingDocuments: [],
         isOpen={showUploadProgress}
         uploadProgress={uploadProgress}
       />
+
+      {/* Passport Expiry Warning Modal */}
+      {showExpiryWarningModal && (
+        <div className="modal-overlay" onClick={() => setShowExpiryWarningModal(false)}>
+          <div className="modal-content expiry-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>⚠️ Passport Expiry Warning</h2>
+              <button className="modal-close" onClick={() => setShowExpiryWarningModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              {expiryWarning.isExpired ? (
+                <>
+                  <p className="expiry-error">Your passport has expired!</p>
+                  <p>Your passport expired {Math.abs(expiryWarning.daysUntilExpiry)} days ago. You cannot apply for a visa with an expired passport.</p>
+                  <p><strong>What to do:</strong></p>
+                  <ul>
+                    <li>Renew your passport immediately at your nearest passport office</li>
+                    <li>Return to complete your application after receiving your new passport</li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <p className="expiry-warning-msg">Your passport expires in {expiryWarning.daysUntilExpiry} days!</p>
+                  <p>Most countries require your passport to be valid for at least 6 months beyond your intended stay.</p>
+                  <p><strong>Recommendation:</strong></p>
+                  <ul>
+                    <li>Renew your passport before applying for a visa</li>
+                    <li>If you proceed, your visa application may be rejected</li>
+                    <li>Processing time: 2-4 weeks for passport renewal</li>
+                  </ul>
+                </>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="btn btn-primary" 
+                onClick={() => setShowExpiryWarningModal(false)}
+              >
+                I Understand
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

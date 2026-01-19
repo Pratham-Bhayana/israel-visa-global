@@ -133,7 +133,7 @@ const Home = () => {
             "@type": "Organization",
             "name": "Israel Visa Application",
             "url": "https://indoisraelvisa.com/",
-            "logo": "https://res.cloudinary.com/dl99np8d8/image/upload/v1767933071/RES_VISA_LOGO_reoumf.png",
+            "logo": "https://res.cloudinary.com/dlwn3lssr/image/upload/v1768806103/ISRAEL_VISA_IN_nhomyl.png",
             "description": "Official Israel visa application portal",
             "address": {
               "@type": "PostalAddress",
