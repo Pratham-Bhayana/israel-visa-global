@@ -222,6 +222,54 @@
   color: #94A3B8;
 }
 
+.otp-input-wrapper {
+  margin-bottom: 16px;
+}
+
+.otp-input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #E2E8F0;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  letter-spacing: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+  font-family: 'Courier New', monospace;
+  color: #1E293B;
+}
+
+.otp-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(0, 56, 184, 0.1);
+  outline: none;
+}
+
+.change-number-btn {
+  display: block;
+  margin: 12px auto 0;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: var(--primary-blue);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+  font-weight: 500;
+}
+
+.change-number-btn:hover {
+  opacity: 0.8;
+}
+
+#recaptcha-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+  min-height: 78px;
+}
+
 .social-login {
   display: flex;
   flex-direction: column;

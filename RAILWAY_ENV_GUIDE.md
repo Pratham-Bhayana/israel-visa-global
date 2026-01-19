@@ -14,6 +14,23 @@ NODE_ENV=production
 
 ---
 
+## reCAPTCHA Enterprise
+
+Get credentials from: https://console.cloud.google.com/security/recaptcha
+
+```
+RECAPTCHA_PROJECT_ID=israelvisa-1a0b3
+RECAPTCHA_SITE_KEY=6LdyHk8sAAAAAG43bRZ0XFSdm7m9EOIsPomDris5
+GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account-key.json
+```
+
+**Important:** 
+- Set up Google Cloud service account with reCAPTCHA Enterprise API enabled
+- Download service account JSON key
+- For Railway: Upload key as file or paste JSON content into env variable
+
+---
+
 ## Database (MongoDB Atlas)
 
 Get this from: https://cloud.mongodb.com → Connect → Connect your application
