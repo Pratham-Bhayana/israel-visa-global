@@ -61,6 +61,7 @@ function App() {
                 <Route path="/blogs" element={<BlogsPage />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
                 <Route path="/india-visa" element={<IndiaVisa />} />
+                <Route path="/israel-evisa" element={<Application />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

@@ -189,9 +189,9 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
-                Get Your Israel Visa Online 
+                eVisa Services for India & Israel 
                 <br />
-                {/* <span className="highlight">Fast & Secure Application Process</span> */}
+               
               </motion.h1>
               <motion.p
                 className="hero-subtitle"
@@ -199,9 +199,9 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
               >
-                Fast, secure, and hassle-free visa application process.
+                Apply Online • Upload Documents • Secure Payment • Real-Time Tracking
                 <br />
-                Get your Israel visa in just 3-5 business days.
+                
               </motion.p>
               <motion.div
                 className="hero-actions"
@@ -215,7 +215,7 @@ const Home = () => {
                   whileTap={{ scale: 0.95 }}
                   onClick={handleApplyClick}
                 >
-                  Apply for Israel Visa
+                  Apply for Israel eVisa
                 </motion.button>
                 <Link to="/india-visa">
                   <motion.button
@@ -223,7 +223,7 @@ const Home = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Apply for India Visa
+                    Apply for India eVisa
                   </motion.button>
                 </Link>
               </motion.div>

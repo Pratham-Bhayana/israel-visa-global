@@ -59,7 +59,7 @@ const Navbar = () => {
     >
       <div className="navbar-container container">
        <Link to="/" className="navbar-logo">
-       <img src="https://res.cloudinary.com/dl99np8d8/image/upload/v1767933071/RES_VISA_LOGO_reoumf.png" alt="Logo" className="logo-image"/>
+       <img src="https://res.cloudinary.com/dl99np8d8/image/upload/v1768802348/Edited_logo_INDOISRAEl_r1q4he.png" alt="Logo" className="logo-image"/>
       </Link>
         
 
@@ -75,6 +75,14 @@ const Navbar = () => {
               >
                 Home
               </Link>
+            </motion.li>
+             <motion.li
+             whileHover={{ scale: 1.05 }}
+             whileTap={{ scale: 0.95 }}
+             >
+            <Link to="/israel-evisa" className={`navbar-link ${location.pathname === '/israel-evisa' ? 'active' : ''}`}>
+             Israel eVisa
+            </Link>
             </motion.li>
             <motion.li
               whileHover={{ scale: 1.05 }}
@@ -99,6 +107,7 @@ const Navbar = () => {
                 Apply Now
               </a>
             </motion.li>
+           
             <motion.li
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -110,6 +119,7 @@ const Navbar = () => {
                 My Profile
               </Link>
             </motion.li>
+
           </ul>
 
           <div className="navbar-actions">
