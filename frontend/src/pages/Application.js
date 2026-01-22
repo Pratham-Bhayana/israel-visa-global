@@ -1081,6 +1081,27 @@ supportingDocuments: [],
                         })}
                       </div>
                     </div>
+                    
+                    {/* Mobile Footer for Israel Visa Type */}
+                    {formData.visaType && selectedVisaFee && (
+                      <div className="mobile-visa-footer">
+                        <div className="mobile-visa-info">
+                          <div className="mobile-visa-name">
+                            {visaTypes.find(v => v._id === formData.visaType)?.name}
+                          </div>
+                          <div className="mobile-visa-fee">
+                            ₹{selectedVisaFee.toLocaleString('en-IN')}
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="mobile-continue-btn"
+                          onClick={handleNext}
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -1149,6 +1170,27 @@ supportingDocuments: [],
                         }
                       </div>
                     </div>
+                    
+                    {/* Mobile Footer for India Visa Type */}
+                    {formData.visaType && selectedVisaFee && (
+                      <div className="mobile-visa-footer">
+                        <div className="mobile-visa-info">
+                          <div className="mobile-visa-name">
+                            {indiaVisaTypes.find(v => v._id === formData.visaType)?.name}
+                          </div>
+                          <div className="mobile-visa-fee">
+                            ₹{selectedVisaFee.inr.toLocaleString('en-IN')}
+                          </div>
+                        </div>
+                        <button 
+                          type="button" 
+                          className="mobile-continue-btn"
+                          onClick={handleNext}
+                        >
+                          Continue
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
 

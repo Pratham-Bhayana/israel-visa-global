@@ -586,43 +586,9 @@
     flex-direction: column;
   }
 
+  /* Hide progress sidebar on mobile */
   .progress-sidebar {
-    position: relative;
-    top: 0;
-    width: 100%;
-    margin-bottom: 2rem;
-  }
-
-  .progress-steps {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0;
-  }
-
-  .progress-step {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    flex: 1;
-  }
-
-  .step-label {
-    font-size: 0.75rem;
-    text-align: center;
-  }
-
-  .progress-line {
-    left: 0;
-    right: 0;
-    top: 18px;
-    width: auto;
-    height: 2px;
-  }
-
-  .progress-fill {
-    height: 100%;
-    width: var(--progress-width, 0%);
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: none;
   }
 }
 

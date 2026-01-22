@@ -20,6 +20,7 @@
 .navbar-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 100%;
   padding-left: 0;
 }
@@ -166,6 +167,7 @@
   border: none;
   cursor: pointer;
   padding: 0.5rem;
+  margin-left: auto;
 }
 
 .mobile-menu-toggle span {
@@ -189,8 +191,20 @@
 }
 
 @media (max-width: 768px) {
+  .logo-image {
+    height: 35px;
+    margin-top: 10px;
+  }
+
+  .navbar-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
   .mobile-menu-toggle {
     display: flex;
+    margin-right: -0.5rem;
+    padding-right: 0;
   }
 
   .navbar-menu {

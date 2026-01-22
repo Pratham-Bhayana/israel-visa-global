@@ -1254,44 +1254,9 @@
     flex-direction: column;
   }
 
+  /* Hide progress sidebar on mobile */
   .progress-sidebar {
-    position: relative;
-    top: 0;
-    width: 100%;
-    margin-bottom: 2rem;
-    padding-top: 10px;
-  }
-
-  .progress-steps {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 0;
-  }
-
-  .progress-step {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    flex: 1;
-  }
-
-  .step-label {
-    font-size: 0.75rem;
-    text-align: center;
-  }
-
-  .progress-line {
-    left: 0;
-    right: 0;
-    top: 30px;
-    width: auto;
-    height: 2px;
-  }
-
-  .progress-fill {
-    height: 100%;
-    width: var(--progress-width, 0%);
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: none !important;
   }
 }
 
@@ -1302,6 +1267,11 @@
 
   .application-form {
     padding: 2rem 1.5rem;
+  }
+
+  /* Ensure progress sidebar stays hidden */
+  .progress-sidebar {
+    display: none !important;
   }
 
   .step-header-with-fee {
@@ -1325,6 +1295,62 @@
 
   .documents-grid {
     grid-template-columns: 1fr;
+  }
+  
+  /* Fix upload grid on mobile */
+  .upload-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Fix document upload boxes on mobile */
+  .document-upload-box {
+    width: 100px;
+    height: 100px;
+    padding: 1rem 0.5rem;
+  }
+  
+  .upload-plus-btn {
+    width: 100px;
+    height: 100px;
+    font-size: 24px;
+  }
+  
+  .document-upload-box span {
+    font-size: 0.75rem;
+  }
+  
+  /* Fix uploaded file display on mobile */
+  .document-uploaded {
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .document-uploaded-name {
+    font-size: 0.75rem;
+    max-width: 100%;
+  }
+  
+  /* Fix file uploaded container on mobile */
+  .file-uploaded {
+    padding: 0.75rem 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .file-uploaded-name {
+    font-size: 0.8125rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Fix document block on mobile */
+  .document-block {
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .form-step h2 {
@@ -1679,4 +1705,74 @@
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
+}
+/* Mobile Visa Footer */
+.mobile-visa-footer {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .mobile-visa-footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 2px solid #0038B8;
+  }
+
+  .mobile-visa-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .mobile-visa-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0F172A;
+    line-height: 1.2;
+  }
+
+  .mobile-visa-fee {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0038B8;
+  }
+
+  .mobile-continue-btn {
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 56, 184, 0.25);
+  }
+
+  .mobile-continue-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 56, 184, 0.35);
+  }
+
+  .mobile-continue-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Add padding to form step to prevent overlap with footer */
+  .form-step {
+    padding-bottom: 100px;
+  }
 }
