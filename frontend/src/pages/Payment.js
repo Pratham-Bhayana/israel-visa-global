@@ -378,6 +378,24 @@ const Payment = () => {
             </motion.div>
           </div>
         </div>
+
+        {/* Mobile-Only Footer */}
+        <div className="mobile-payment-footer">
+          <button
+            className="mobile-cancel-btn"
+            onClick={() => navigate('/profile')}
+            disabled={processing}
+          >
+            Cancel
+          </button>
+          <button
+            className="mobile-pay-btn"
+            onClick={handleRazorpayPayment}
+            disabled={processing || !application}
+          >
+            {processing ? 'Processing...' : `Pay ₹${((application.paymentAmount || 0) + (selectedEsim ? selectedEsim.price : 0)).toLocaleString('en-IN')}`}
+          </button>
+        </div>
       </div>
     </>
   );
