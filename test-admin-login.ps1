@@ -4,7 +4,7 @@ $BASE_URL = "https://israel-visa-global-production.up.railway.app/api"
 Write-Host "`n🔍 Testing Authentication System...`n" -ForegroundColor Cyan
 
 # Test 1: Health Check
-Write-Host "1️⃣ Testing Health Endpoint..." -ForegroundColor Yellow
+Write-Host "1️⃣ Testing Health Endpoint..." -ForegroundColor Yellow   
 try {
     $health = Invoke-RestMethod -Uri "$BASE_URL/health" -Method Get
     Write-Host "✅ Health Check: " -ForegroundColor Green -NoNewline

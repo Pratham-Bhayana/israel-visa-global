@@ -9,6 +9,7 @@
     "cloudinary": "^2.8.0",
     "firebase": "^12.7.0",
     "framer-motion": "^10.16.16",
+    "razorpay": "^2.9.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.5",

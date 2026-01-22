@@ -1,6 +1,6 @@
 .payment-page {
   min-height: calc(100vh - 80px);
-  padding: 6rem 1.5rem 3rem;
+  padding: 2rem 1.5rem;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
@@ -11,53 +11,551 @@
 
 .payment-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .payment-header h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--primary-blue);
   margin: 0 0 0.5rem 0;
 }
 
 .payment-header p {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--gray-text);
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .payment-content {
   display: grid;
-  grid-template-columns: 350px 1fr;
-  gap: 2rem;
+  grid-template-columns: 320px 1fr;
+  gap: 1.5rem;
   align-items: start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.payment-content-centered {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 3rem;
+  padding: 0 1rem;
+}
+
+/* Main Payment Card */
+.payment-card-main {
+  width: 100%;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Blue Header */
+.payment-card-header {
+  background: linear-gradient(135deg, #0038B8 0%, #0052e0 100%);
+  padding: 1.75rem 2rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.payment-card-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: white;
+}
+
+.application-id-header {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  font-weight: 500;
+}
+
+.header-right {
+  flex-shrink: 0;
+}
+
+.amount-badge {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  backdrop-filter: blur(10px);
+}
+
+.amount-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+}
+
+.amount-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+/* White Content Area */
+.payment-card-content {
+  padding: 2rem;
+  background: #f8f9fa;
+}
+
+/* Visa Details Section */
+.visa-details-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-row-white {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row-white:last-child {
+  border-bottom: none;
+}
+
+.label-white {
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.value-white {
+  color: #212529;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+/* Add-ons Section */
+.addons-section {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.addons-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #6c757d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.addons-icon {
+  color: #0038B8;
+  font-size: 1rem;
+}
+
+.view-all-plans-link,
+.back-to-summary-link {
+  background: none;
+  border: none;
+  color: #0038B8;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1rem;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.view-all-plans-link:hover,
+.back-to-summary-link:hover {
+  color: #002a8f;
+  text-decoration: underline;
+}
+
+/* Plans Grid */
+.plans-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.plans-grid.compact {
+  grid-template-columns: 1fr 1fr;
+}
+
+.plans-grid.expanded {
+  grid-template-columns: 1fr 1fr;
+}
+
+.plan-card-horizontal {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.plan-card-horizontal:hover {
+  border-color: #0038B8;
+  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.15);
+}
+
+.plan-card-horizontal.selected {
+  border-color: #0038B8;
+  background: #f0f4ff;
+  box-shadow: 0 4px 16px rgba(0, 56, 184, 0.2);
+}
+
+.plan-card-radio {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.radio-button {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #d0d0d0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.radio-button.checked {
+  border-color: #0038B8;
+}
+
+.radio-inner {
+  width: 10px;
+  height: 10px;
+  background: #0038B8;
+  border-radius: 50%;
+}
+
+.plan-card-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0038B8;
+  margin: 0;
+}
+
+.plan-description {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 0.25rem 0;
+}
+
+.plan-validity-text {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.plan-card-price {
+  margin-top: auto;
+}
+
+.price-amount {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0038B8;
+}
+
+/* Total Amount Section */
+.total-amount-section {
+  background: #1a1d29;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.total-amount-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-label {
+  font-size: 0.85rem;
+  color: #a0a0a0;
+  margin: 0 0 0.25rem 0;
+}
+
+.total-sublabel {
+  font-size: 0.7rem;
+  color: #808080;
+  margin: 0;
+}
+
+.total-price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+}
+
+/* Pay Button */
+.btn-pay-now {
+  width: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(135deg, #0038B8 0%, #0052e0 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 1rem;
+}
+
+.btn-pay-now:hover:not(:disabled) {
+  background: linear-gradient(135deg, #002a8f 0%, #003d99 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 56, 184, 0.3);
+}
+
+.btn-pay-now:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Cancel Link */
+.btn-cancel-payment {
+  width: 100%;
+  background: none;
+  border: none;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel-payment:hover:not(:disabled) {
+  color: #212529;
+}
+
+/* Security Footer */
+.security-notice-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  color: #6c757d;
+  font-size: 0.8rem;
+}
+
+.shield-icon-footer {
+  color: #0038B8;
+  font-size: 1rem;
+}
+
+.payment-content-two-column {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2.5rem;
+  max-width: 1050px;
+  margin: 0 auto;
+  align-items: start;
+  padding: 0 1rem;
+}
+
+/* eSIM Selection Section */
+.esim-section {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  color: #212529;
+  height: fit-content;
+}
+
+.esim-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.esim-header-icon {
+  font-size: 1.75rem;
+  color: #0038B8;
+}
+
+.esim-section h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+}
+
+.esim-subtitle {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin: 0.4rem 0 1.3rem 0;
+  font-weight: 500;
+}
+
+.esim-plans-container {
+  margin-bottom: 1.1rem;
+}
+
+.esim-plans-container.vertical-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.esim-plans-container.grid-view {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.esim-plans-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1.1rem;
+}
+
+.esim-plan-card-vertical {
+  padding: 1.1rem;
+  background: #ffffff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  color: #212529;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border: 2px solid transparent;
+}
+
+.grid-view .esim-plan-card-vertical {
+  padding: 0.9rem;
+}
+
+.esim-plan-card-vertical:hover {
+  background: #fafbff;
+  transform: translateX(2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #0038B8;
+}
+
+.esim-plan-card-vertical.selected {
+  background: white;
+  border: 2px solid #0038B8;
+  box-shadow: 0 6px 16px rgba(0, 56, 184, 0.2);
+}
+
+.plan-data-vertical {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0038B8;
+}
+
+.plan-price-vertical {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #212529;
+}
+
+.plan-validity-vertical {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.plan-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.1rem;
+  color: #0038B8;
+}
+
+.view-all-plans {
+  width: 100%;
+  padding: 0.85rem;
+  background: #ffffff;
+  border: 2px solid #0038B8;
+  color: #0038B8;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.view-all-plans:hover {
+  background: #0038B8;
+  color: white;
 }
 
 .payment-left-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.2rem;
   position: sticky;
-  top: 6rem;
+  top: 4rem;
 }
 
 .payment-right-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.25rem;
 }
 
 /* eSIM Highlight Card - Left Sidebar */
 .esim-highlight-card {
   background: linear-gradient(135deg, #0038B8 0%, #0052e0 100%);
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: 0 8px 24px rgba(0, 56, 184, 0.35);
   border: 3px solid #fff;
   position: relative;
   overflow: hidden;
-  animation: cardPulse 2s ease-in-out infinite;
 }
 
 @keyframes cardPulse {
@@ -85,6 +583,7 @@
 
 .sim-icon {
   font-size: 1.75rem;
+  color: #fff;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
@@ -99,7 +598,7 @@
 .esim-tagline {
   color: #e6eeff;
   font-size: 0.85rem;
-  margin: 0 0 1.25rem 0;
+  margin: 0 0 0.75rem 0;
   font-weight: 500;
 }
 
@@ -208,9 +707,10 @@
 /* Application Summary */
 .application-summary {
   background: var(--primary-white);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
 }
 
 .application-summary h2 {
@@ -226,12 +726,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+  padding: 0.6rem 0;
   border-bottom: 1px solid #f0f0f0;
+  font-size: 0.95rem;
 }
 
 .summary-item.total {
-  padding-top: 1.5rem;
+  padding-top: 0.75rem;
   border-bottom: none;
 }
 
@@ -266,18 +767,110 @@
 /* Payment Methods */
 .payment-methods {
   background: var(--primary-white);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
 }
 
 .payment-methods h2 {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary-blue);
-  margin: 0 0 2rem 0;
-  padding-bottom: 1rem;
-  border-bottom: 3px solid var(--primary-blue);
+  margin: 0 0 1.25rem 0;
+}
+
+/* Payment Summary Card */
+.payment-summary-card {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, #0052cc 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 56, 184, 0.3);
+  border: 2px solid var(--primary-blue);
+  max-width: 700px;
+  margin: 0 auto;
+  color: white;
+}
+
+.payment-summary-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.summary-details {
+  margin-bottom: 1.75rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.detail-row .label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.detail-row .value {
+  color: white;
+  font-weight: 600;
+}
+
+.detail-row:last-of-type:not(.total) {
+  border-bottom: none;
+}
+
+.detail-row .label {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.detail-row .value {
+  color: white;
+  font-weight: 700;
+  text-align: right;
+}
+
+.detail-row .value.amount {
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.summary-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 1rem 0;
+}
+
+.detail-row.total {
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  margin-top: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: none;
+}
+
+.detail-row.total .label {
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+}
+
+.detail-row.total .value {
+  font-size: 1.4rem;
+  color: white;
 }
 
 .payment-methods h3 {
@@ -446,50 +1039,52 @@
   gap: 1rem;
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 2px solid #e9ecef;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-cancel {
   flex: 1;
-  padding: 1rem 2rem;
-  background: #6c757d;
-  color: var(--primary-white);
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.btn-cancel:hover:not(:disabled) {
-  background: #5a6268;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
-
-.btn-submit-payment {
-  flex: 2;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, #0052cc 100%);
-  color: var(--primary-white);
-  border: none;
-  border-radius: 10px;
+  padding: 1.1rem 2rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+  border-radius: 12px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
-  box-shadow: 0 4px 12px rgba(0, 56, 184, 0.3);
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background: white;
+  color: var(--primary-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn-submit-payment {
+  flex: 1.5;
+  padding: 1.1rem 2rem;
+  background: white;
+  color: var(--primary-blue);
+  border: 2px solid white;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .btn-submit-payment:hover:not(:disabled) {
-  background: linear-gradient(135deg, #002a8f 0%, #003d99 100%);
+  background: #f8f9fa;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 56, 184, 0.4);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
 }
 
 .btn-cancel:disabled,
@@ -917,6 +1512,122 @@
   transform: translateY(-2px);
 }
 
+/* Razorpay Payment Section */
+.razorpay-info {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 0;
+  display: none;
+}
+
+.benefit-icon {
+  color: #10b981;
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.payment-gateway-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+}
+
+.secure-icon {
+  font-size: 1.75rem;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.payment-gateway-badge h3 {
+  margin: 0 0 0.25rem 0;
+  color: var(--primary-blue);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.payment-gateway-badge p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.accepted-methods {
+  margin-top: 1rem;
+}
+
+.accepted-methods h4 {
+  font-size: 0.95rem;
+  color: #495057;
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+}
+
+.method-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.method-badges .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.method-badges .badge svg {
+  font-size: 1rem;
+  color: var(--primary-blue);
+}
+
+.security-notice {
+  margin-top: 1.25rem;
+  padding: 0.875rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 4px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+}
+
+.security-notice p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shield-icon {
+  font-size: 1.1rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.btn-submit-payment .spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
 /* Responsive for eSIM Section */
 @media (max-width: 1024px) {
   .esim-plans-grid {
@@ -941,5 +1652,14 @@
 
   .remove-esim-btn {
     width: 100%;
+  }
+
+  .method-badges {
+    justify-content: center;
+  }
+
+  .payment-gateway-badge {
+    flex-direction: column;
+    text-align: center;
   }
 }

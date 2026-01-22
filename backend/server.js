@@ -109,6 +109,7 @@ app.use('/api/visa-types', require('./routes/visaTypes'));
 app.use('/api/upload', require('./routes/upload'));
 app.use('/api/blogs', require('./routes/blogs'));
 app.use('/api/admin/blogs', require('./routes/adminBlogs'));
+app.use('/api/payment', require('./routes/payment'));
 
 // Health check
 app.get('/api/health', (req, res) => {

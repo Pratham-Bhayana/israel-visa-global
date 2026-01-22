@@ -5,7 +5,19 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
+import { FaWifi, FaShieldAlt } from 'react-icons/fa';
 import './Payment.css';
+
+// Load Razorpay Script
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 const Payment = () => {
   const { applicationId } = useParams();
@@ -14,11 +26,8 @@ const Payment = () => {
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
   const [application, setApplication] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('upi');
-  const [paymentProof, setPaymentProof] = useState(null);
-  const [transactionId, setTransactionId] = useState('');
   const [selectedEsim, setSelectedEsim] = useState(null);
-  const [showEsimDetails, setShowEsimDetails] = useState(false);
+  const [showAllPlans, setShowAllPlans] = useState(false);
 
   useEffect(() => {
     if (!currentUser) {
@@ -26,6 +35,7 @@ const Payment = () => {
       return;
     }
     fetchApplicationDetails();
+    loadRazorpayScript();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser, applicationId, navigate]);
 
@@ -52,95 +62,29 @@ const Payment = () => {
     }
   };
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('File size should not exceed 5MB');
-      return;
-    }
-
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error('Only JPG, PNG, and PDF files are allowed');
-      return;
-    }
-
-    setPaymentProof(file);
-    toast.success('Payment proof uploaded successfully');
-  };
-
-  const handlePayment = async (e) => {
-    e.preventDefault();
-
-    if (!paymentProof) {
-      toast.error('Please upload payment proof');
-      return;
-    }
-
-    if (!transactionId.trim()) {
-      toast.error('Please enter transaction ID');
-      return;
-    }
-
-    setProcessing(true);
-
+  const handleRazorpayPayment = async () => {
     try {
-      // First, upload payment proof to backend which uploads to Cloudinary
-      let paymentProofUrl = null;
-      if (paymentProof) {
-        const uploadFormData = new FormData();
-        uploadFormData.append('file', paymentProof);
+      setProcessing(true);
 
-        try {
-          const uploadResponse = await axios.post(
-            `${process.env.REACT_APP_API_URL}/api/upload?folder=israel-visa/payments`,
-            uploadFormData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }
-          );
-          
-          if (uploadResponse.data.success) {
-            paymentProofUrl = uploadResponse.data.data.url;
-          } else {
-            throw new Error(uploadResponse.data.message || 'Upload failed');
-          }
-        } catch (uploadError) {
-          console.error('Upload error:', uploadError);
-          toast.error('Failed to upload payment proof. Please try again.');
-          setProcessing(false);
-          return;
-        }
+      // Load Razorpay script if not already loaded
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        toast.error('Failed to load payment gateway. Please refresh and try again.');
+        setProcessing(false);
+        return;
       }
 
-      // Then, submit payment to backend with the uploaded file URL
+      // Calculate total amount
+      const esimPrice = selectedEsim ? selectedEsim.price : 0;
+
+      // Create order on backend
       const token = await currentUser.getIdToken();
-      const paymentData = {
-        paymentMethod: paymentMethod,
-        transactionId: transactionId,
-        paymentProof: paymentProofUrl,
-      };
-      
-      // Include eSIM data if selected
-      if (selectedEsim) {
-        paymentData.esim = JSON.stringify({
-          selected: true,
-          data: selectedEsim.data,
-          price: selectedEsim.price,
-          validity: selectedEsim.validity,
-          type: selectedEsim.type,
-        });
-      }
-
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/applications/${applicationId}/payment`,
-        paymentData,
+      const orderResponse = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/payment/create-order`,
+        {
+          applicationId: applicationId,
+          esimPrice: esimPrice,
+        },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -152,40 +96,114 @@ const Payment = () => {
         }
       );
 
-      if (response.data.success) {
-        toast.success('Payment submitted successfully! Your application is now under review.');
-        setTimeout(() => {
-          navigate('/profile');
-        }, 2000);
+      if (!orderResponse.data.success) {
+        throw new Error(orderResponse.data.message || 'Failed to create order');
       }
+
+      const { order, keyId, applicantName, applicantEmail } = orderResponse.data;
+
+      // Configure Razorpay options
+      const options = {
+        key: keyId,
+        amount: order.amount, // Amount in paise
+        currency: order.currency,
+        name: 'Israel Visa Services',
+        description: `Visa Application - ${application.applicationNumber || applicationId}`,
+        order_id: order.id,
+        prefill: {
+          name: applicantName || currentUser.displayName || '',
+          email: applicantEmail || currentUser.email || '',
+          contact: application.phoneNumber || '',
+        },
+        theme: {
+          color: '#0038B8', // Israel flag blue
+        },
+        handler: async function (response) {
+          // Payment successful - verify on backend
+          try {
+            const verifyResponse = await axios.post(
+              `${process.env.REACT_APP_API_URL}/api/payment/verify`,
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                applicationId: applicationId,
+                esim: selectedEsim ? JSON.stringify({
+                  selected: true,
+                  data: selectedEsim.data,
+                  price: selectedEsim.price,
+                  validity: selectedEsim.validity,
+                  type: selectedEsim.type,
+                }) : null,
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                  'x-user-email': currentUser.email,
+                  'x-user-name': currentUser.displayName || currentUser.email?.split('@')[0],
+                  'x-user-uid': currentUser.uid,
+                },
+              }
+            );
+
+            if (verifyResponse.data.success) {
+              toast.success('Payment successful! Your application is now under review.');
+              setTimeout(() => {
+                navigate('/profile');
+              }, 2000);
+            } else {
+              toast.error('Payment verification failed. Please contact support.');
+            }
+          } catch (verifyError) {
+            console.error('Payment verification error:', verifyError);
+            toast.error('Payment verification failed. Please contact support with your payment ID.');
+          } finally {
+            setProcessing(false);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            toast.warning('Payment cancelled. You can retry anytime.');
+            setProcessing(false);
+          },
+        },
+      };
+
+      // Open Razorpay checkout
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
       console.error('Payment error:', error);
-      toast.error(error.response?.data?.message || 'Payment submission failed');
-    } finally {
+      toast.error(error.response?.data?.message || error.message || 'Failed to initiate payment');
       setProcessing(false);
     }
   };
 
   // eSIM Plans Data (prices in INR)
-  const esimPlans = {
-    limited: [
-      { data: '1GB', price: 425, validity: '5 DAYS', type: 'limited' },
-      { data: '3GB', price: 680, validity: '7 DAYS', type: 'limited' },
-      { data: '5GB', price: 1020, validity: '15 DAYS', type: 'limited' },
-      { data: '10GB', price: 1700, validity: '30 DAYS', type: 'limited' },
-      { data: '15GB', price: 2125, validity: '30 DAYS', type: 'limited' },
-      { data: '25GB', price: 2975, validity: '30 DAYS', type: 'limited' },
-    ],
-    unlimited: [
-      { data: 'UNLIMITED', price: 1020, validity: '3 DAYS', type: 'unlimited' },
-      { data: 'UNLIMITED', price: 1530, validity: '5 DAYS', type: 'unlimited' },
-      { data: 'UNLIMITED', price: 1955, validity: '7 DAYS', type: 'unlimited' },
-      { data: 'UNLIMITED', price: 2720, validity: '10 DAYS', type: 'unlimited' },
-    ]
-  };
+  const esimPlans = [
+    { data: '10GB', price: 499, validity: '30 DAYS', type: 'limited' },
+    { data: 'UNLIMITED', price: 1020, validity: '3 DAYS', type: 'unlimited' },
+    { data: '5GB', price: 999, validity: '30 DAYS', type: 'limited' },
+    { data: '20GB', price: 1999, validity: '60 DAYS', type: 'limited' },
+    { data: 'UNLIMITED', price: 1530, validity: '5 DAYS', type: 'unlimited' },
+    { data: 'UNLIMITED', price: 2720, validity: '10 DAYS', type: 'unlimited' },
+  ];
+
+  // Show only first 2 plans initially
+  const displayedPlans = showAllPlans ? esimPlans : esimPlans.slice(0, 2);
 
   const handleEsimSelection = (plan) => {
-    setSelectedEsim(plan);
+    // Toggle selection - deselect if clicking the same plan
+    if (selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity) {
+      setSelectedEsim(null);
+    } else {
+      setSelectedEsim(plan);
+    }
+  };
+
+  const toggleViewAllPlans = () => {
+    setShowAllPlans(!showAllPlans);
   };
 
   if (loading) {
@@ -219,340 +237,141 @@ const Payment = () => {
 
       <div className="payment-page">
         <div className="payment-container">
-          <motion.div
-            className="payment-header"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1>Complete Your Payment</h1>
-            <p>Application ID: {application.applicationNumber || applicationId}</p>
-          </motion.div>
+          <div className="payment-content-centered">
 
-          <div className="payment-content">
-            {/* Left Sidebar */}
-            <div className="payment-left-sidebar">
-              {/* eSIM Highlight Card */}
-              <motion.div
-                className="esim-highlight-card"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                <div className="esim-card-header">
-                  <span className="sim-icon">📶</span>
-                  <h3>Add Israel eSIM</h3>
+            {/* Single Payment Card */}
+            <motion.div
+              className="payment-card-main"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Blue Header */}
+              <div className="payment-card-header">
+                <div className="header-left">
+                  <h2>Order Summary</h2>
+                  <p className="application-id-header">Application ID: {application.applicationNumber || applicationId}</p>
                 </div>
-                <p className="esim-tagline">Stay Connected with 5G/4G LTE</p>
-                
-                <div className="esim-quick-plans">
-                  <div className="quick-plan" onClick={() => handleEsimSelection(esimPlans.limited[0])}>
-                    <span className="plan-name">{esimPlans.limited[0].data}</span>
-                    <span className="plan-price">₹{esimPlans.limited[0].price}</span>
-                    <span className="plan-validity">{esimPlans.limited[0].validity}</span>
-                  </div>
-                  <div className="quick-plan" onClick={() => handleEsimSelection(esimPlans.unlimited[0])}>
-                    <span className="plan-name">{esimPlans.unlimited[0].data}</span>
-                    <span className="plan-price">₹{esimPlans.unlimited[0].price}</span>
-                    <span className="plan-validity">{esimPlans.unlimited[0].validity}</span>
+                <div className="header-right">
+                  <div className="amount-badge">
+                    <span className="amount-label">Total</span>
+                    <span className="amount-value">
+                      ₹{((application.paymentAmount || 0) + (selectedEsim ? selectedEsim.price : 0)).toLocaleString('en-IN')}
+                    </span>
                   </div>
                 </div>
+              </div>
+
+              {/* White Content Area */}
+              <div className="payment-card-content">
                 
-                <button 
-                  className="view-all-plans-btn"
-                  onClick={() => setShowEsimDetails(!showEsimDetails)}
+                {/* Visa Details */}
+                <div className="visa-details-section">
+                  <div className="detail-row-white">
+                    <span className="label-white">Visa Type</span>
+                    <span className="value-white">
+                      {typeof application.visaType === 'object' && application.visaType?.name 
+                        ? application.visaType.name 
+                        : application.visaType || 'N/A'}
+                    </span>
+                  </div>
+                  <div className="detail-row-white">
+                    <span className="label-white">Applicant</span>
+                    <span className="value-white">{application.fullName || currentUser.displayName}</span>
+                  </div>
+                  <div className="detail-row-white">
+                    <span className="label-white">Visa Fee</span>
+                    <span className="value-white">₹{(application.paymentAmount || 0).toLocaleString('en-IN')}</span>
+                  </div>
+                </div>
+
+                {/* Recommended Add-ons Section */}
+                <div className="addons-section">
+                  <div className="addons-header">
+                    <FaWifi className="addons-icon" />
+                    <span>RECOMMENDED ADD-ONS</span>
+                  </div>
+
+                  {!showAllPlans && (
+                    <button className="view-all-plans-link" onClick={toggleViewAllPlans}>
+                      View All Plans →
+                    </button>
+                  )}
+
+                  {showAllPlans && (
+                    <button className="back-to-summary-link" onClick={toggleViewAllPlans}>
+                      ← Back to Summary
+                    </button>
+                  )}
+
+                  {/* Plans Grid */}
+                  <div className={`plans-grid ${showAllPlans ? 'expanded' : 'compact'}`}>
+                    {displayedPlans.map((plan, index) => (
+                      <div
+                        key={index}
+                        className={`plan-card-horizontal ${selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity ? 'selected' : ''}`}
+                        onClick={() => handleEsimSelection(plan)}
+                      >
+                        <div className="plan-card-radio">
+                          <div className={`radio-button ${selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity ? 'checked' : ''}`}>
+                            {selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity && (
+                              <div className="radio-inner"></div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="plan-card-info">
+                          <h4>{plan.data} {plan.type === 'unlimited' ? '' : 'Data'}</h4>
+                          <p className="plan-description">
+                            {plan.type === 'unlimited' ? 'Maximum freedom for travel' : 'Stay connected with 5G/4G LTE'}
+                          </p>
+                          <p className="plan-validity-text">{plan.validity}</p>
+                        </div>
+                        <div className="plan-card-price">
+                          <span className="price-amount">₹{plan.price}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Total Amount Section */}
+                <div className="total-amount-section">
+                  <div className="total-amount-content">
+                    <div>
+                      <p className="total-label">Total Amount</p>
+                      <p className="total-sublabel">Including all taxes & add-ons</p>
+                    </div>
+                    <div className="total-price">
+                      ₹{((application.paymentAmount || 0) + (selectedEsim ? selectedEsim.price : 0)).toLocaleString('en-IN')}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pay Button */}
+                <button
+                  className="btn-pay-now"
+                  onClick={handleRazorpayPayment}
+                  disabled={processing || !application}
                 >
-                  {showEsimDetails ? '← Back' : 'View All Plans →'}
+                  {processing ? 'Processing...' : 'Pay Now'}
                 </button>
 
-                {selectedEsim && (
-                  <div className="selected-plan-badge">
-                    <span>✓ {selectedEsim.data} - ₹{selectedEsim.price}</span>
-                    <button onClick={() => setSelectedEsim(null)}>×</button>
-                  </div>
-                )}
-              </motion.div>
-
-              {/* Application Summary */}
-              <motion.div
-                className="application-summary"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                <h2>Application Summary</h2>
-              <div className="summary-item">
-                <span className="label">Visa Type:</span>
-                <span className="value">{application.visaType}</span>
-              </div>
-              <div className="summary-item">
-                <span className="label">Applicant Name:</span>
-                <span className="value">{application.fullName || currentUser.displayName}</span>
-              </div>
-              <div className="summary-item">
-                <span className="label">Application Fee:</span>
-                <span className="value amount">₹{application.paymentAmount?.toLocaleString('en-IN') || '0'}</span>
-              </div>
-              {selectedEsim && (
-                <div className="summary-item">
-                  <span className="label">eSIM ({selectedEsim.data} - {selectedEsim.validity}):</span>
-                  <span className="value amount">₹{selectedEsim.price.toLocaleString('en-IN')}</span>
-                </div>
-              )}
-              <div className="summary-divider"></div>
-              <div className="summary-item total">
-                <span className="label">Total Amount:</span>
-                <span className="value amount">
-                  ₹{((application.paymentAmount || 0) + (selectedEsim ? selectedEsim.price : 0)).toLocaleString('en-IN')}
-                </span>
-              </div>
-            </motion.div>
-            </div>
-
-            {/* Right Content Area */}
-            <div className="payment-right-content">
-              {showEsimDetails && (
-                <motion.div
-                  className="esim-section esim-full-plans"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.15 }}
+                {/* Cancel Link */}
+                <button
+                  className="btn-cancel-payment"
+                  onClick={() => navigate('/profile')}
+                  disabled={processing}
                 >
-                  <div className="esim-header">
-                    <div className="esim-title-wrapper">
-                      <span className="esim-icon">📶</span>
-                      <h2>All Israel eSIM Plans</h2>
-                    </div>
-                    <p className="esim-subtitle">Choose the perfect plan for your stay</p>
-                  </div>
+                  Cancel Payment
+                </button>
 
-                  {/* Limited Data Plans */}
-                  <div className="esim-plans-group">
-                    <h3>Limited Data Plans</h3>
-                    <div className="esim-plans-grid">
-                      {esimPlans.limited.map((plan, index) => (
-                        <div
-                          key={index}
-                          className={`esim-plan-card ${selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity ? 'selected' : ''}`}
-                          onClick={() => handleEsimSelection(plan)}
-                        >
-                          <div className="plan-badge">Limited</div>
-                          <div className="plan-data">{plan.data}</div>
-                          <div className="plan-validity">{plan.validity}</div>
-                          <div className="plan-price">₹{plan.price.toLocaleString('en-IN')}</div>
-                          {selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity && (
-                            <div className="plan-selected-icon">✓</div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Unlimited Data Plans */}
-                  <div className="esim-plans-group">
-                    <h3>Unlimited Data Plans</h3>
-                    <p className="unlimited-note">2.5GB high-speed daily, renews at midnight</p>
-                    <div className="esim-plans-grid">
-                      {esimPlans.unlimited.map((plan, index) => (
-                        <div
-                          key={index}
-                          className={`esim-plan-card unlimited ${selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity ? 'selected' : ''}`}
-                          onClick={() => handleEsimSelection(plan)}
-                        >
-                          <div className="plan-badge unlimited-badge">Unlimited</div>
-                          <div className="plan-data">{plan.data}</div>
-                          <div className="plan-validity">{plan.validity}</div>
-                          <div className="plan-price">₹{plan.price.toLocaleString('en-IN')}</div>
-                          {selectedEsim?.data === plan.data && selectedEsim?.validity === plan.validity && (
-                            <div className="plan-selected-icon">✓</div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Details */}
-                  <div className="esim-details-content">
-                    <div className="detail-box">
-                      <h4>Limited Data Plans Explained:</h4>
-                      <p>
-                        Limited internet is a set data plan you get for usage. For example: a 30GB plan with 30 days validity from the day you activate it in Israel. While keeping the eSIM connection active, it will slowly deduct from your 30GB balance depending on your usage.
-                      </p>
-                      <p>
-                        Our eSIM connects you locally on an Israeli network, so you're charged as a local user, making our plans cost-friendly and allowing us to provide more data benefits at minimum costs.
-                      </p>
-                      <p className="note">
-                        <strong>Note:</strong> These plans will not renew daily unlike unlimited plans - your data balance carries over until you use it all or the validity expires.
-                      </p>
-                    </div>
-
-                    <div className="detail-box">
-                      <h4>Unlimited Plans Explained:</h4>
-                      <p>
-                        This plan renews every day post-midnight, and a new plan is activated the next day for usage - just like a normal SIM card plan we use every day!
-                      </p>
-                      <p>
-                        You get <strong>Unlimited data at 2.5GB high speed</strong>, unthrottled 5G (where available) or 4G LTE advanced network per 24 hours. If you finish the high-speed daily allowance, the speed will reduce to 512kbps but internet will not stop.
-                      </p>
-                      <p className="note">
-                        <strong>Remember:</strong> Post midnight, your internet will be back at full high speed! This will continue to work every day for as long as you're in Israel.
-                      </p>
-                    </div>
-
-                    <div className="detail-box benefits">
-                      <h4>eSIM Benefits:</h4>
-                      <ul>
-                        <li>✓ No physical SIM card needed - instant activation</li>
-                        <li>✓ Keep your primary SIM active for calls</li>
-                        <li>✓ Local Israeli network rates</li>
-                        <li>✓ 5G/4G LTE high-speed connectivity</li>
-                        <li>✓ No roaming charges</li>
-                        <li>✓ Works immediately upon arrival in Israel</li>
-                      </ul>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-            {/* Payment Methods */}
-            <motion.div
-              className="payment-methods"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <h2>Payment Details</h2>
-              
-              <div className="payment-method-selector">
-                <h3>Select Payment Method</h3>
-                <div className="method-options">
-                  <label className={`method-option ${paymentMethod === 'upi' ? 'active' : ''}`}>
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="upi"
-                      checked={paymentMethod === 'upi'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <span className="method-icon"></span>
-                    <span className="method-name">UPI</span>
-                  </label>
-                  
-                  <label className={`method-option ${paymentMethod === 'bank_transfer' ? 'active' : ''}`}>
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="bank_transfer"
-                      checked={paymentMethod === 'bank_transfer'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <span className="method-icon"></span>
-                    <span className="method-name">Bank Transfer</span>
-                  </label>
-                  
-                  <label className={`method-option ${paymentMethod === 'card' ? 'active' : ''}`}>
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="card"
-                      checked={paymentMethod === 'card'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
-                    />
-                    <span className="method-icon"></span>
-                    <span className="method-name">Card</span>
-                  </label>
+                {/* Security Notice */}
+                <div className="security-notice-footer">
+                  <FaShieldAlt className="shield-icon-footer" />
+                  <span>Secured with 256-bit SSL encryption by Razorpay</span>
                 </div>
               </div>
-
-              {/* Payment Instructions */}
-              <div className="payment-instructions">
-                <h3>Payment Instructions</h3>
-                {paymentMethod === 'upi' && (
-                  <div className="instruction-box">
-                    <p><strong>UPI ID:</strong> israelvisa@upi</p>
-                    <p>1. Open your UPI app (Google Pay, PhonePe, Paytm, etc.)</p>
-                    <p>2. Send ₹{application.paymentAmount?.toLocaleString('en-IN')} to the above UPI ID</p>
-                    <p>3. Save the transaction ID/screenshot</p>
-                    <p>4. Upload the payment proof below</p>
-                  </div>
-                )}
-                {paymentMethod === 'bank_transfer' && (
-                  <div className="instruction-box">
-                    <p><strong>Bank Details:</strong></p>
-                    <p>Account Name: Israel Visa Services</p>
-                    <p>Account Number: 1234567890</p>
-                    <p>IFSC Code: SBIN0001234</p>
-                    <p>Bank: State Bank of India</p>
-                    <br />
-                    <p>Transfer ₹{application.paymentAmount?.toLocaleString('en-IN')} and upload the receipt below</p>
-                  </div>
-                )}
-                {paymentMethod === 'card' && (
-                  <div className="instruction-box">
-                    <p>Please contact our office for card payment details:</p>
-                    <p><strong>Phone:</strong> +91-XXXXXXXXXX</p>
-                    <p><strong>Email:</strong> payment@israelvisa.com</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Payment Form */}
-              <form onSubmit={handlePayment} className="payment-form">
-                <div className="form-group">
-                  <label htmlFor="transactionId">Transaction ID / Reference Number *</label>
-                  <input
-                    type="text"
-                    id="transactionId"
-                    value={transactionId}
-                    onChange={(e) => setTransactionId(e.target.value)}
-                    placeholder="Enter your transaction ID"
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="paymentProof">Upload Payment Proof (JPG, PNG, or PDF) *</label>
-                  <div className="file-upload-box">
-                    <input
-                      type="file"
-                      id="paymentProof"
-                      onChange={handleFileChange}
-                      accept="image/jpeg,image/jpg,image/png,application/pdf"
-                      required
-                    />
-                    <div className="file-upload-label">
-                      {paymentProof ? (
-                        <span className="file-selected">✓ {paymentProof.name}</span>
-                      ) : (
-                        <>
-                          <span className="upload-icon">+</span>
-                          <span>Click to upload or drag and drop</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="payment-actions">
-                  <button
-                    type="button"
-                    onClick={() => navigate('/profile')}
-                    className="btn-cancel"
-                    disabled={processing}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn-submit-payment"
-                    disabled={processing}
-                  >
-                    {processing ? 'Processing...' : 'Submit Payment'}
-                  </button>
-                </div>
-              </form>
             </motion.div>
-            </div>
           </div>
         </div>
       </div>
