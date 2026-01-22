@@ -257,9 +257,9 @@ const Applications = () => {
                          app.paymentStatus === 'processing' ? '⏳ Processing' :
                          app.paymentStatus === 'pending' ? '⚠️ Pending' : 'Unknown'}
                       </span>
-                      {app.paymentAmount && (
-                        <div style={{ fontSize: '0.85rem', color: '#64748B', marginTop: '0.25rem' }}>
-                          ₹{app.paymentAmount.toLocaleString('en-IN')}
+                      {(app.payment?.amount || app.paymentAmount) && (
+                        <div style={{ fontSize: '0.85rem', color: '#10B981', fontWeight: '600', marginTop: '0.25rem' }}>
+                          ₹{(app.payment?.amount || app.paymentAmount).toLocaleString('en-IN')}
                         </div>
                       )}
                     </td>

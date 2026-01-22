@@ -38,7 +38,19 @@ router.post('/create-order', auth, async (req, res) => {
     }
 
     // Check if user owns this application
-    if (application.userId._id.toString() !== req.user.uid && application.userId.firebaseUid !== req.user.uid) {
+    console.log('🔍 Authorization check:');
+    console.log('- Application userId:', application.userId._id.toString());
+    console.log('- Application firebaseUid:', application.userId.firebaseUid);
+    console.log('- Request user _id:', req.user._id.toString());
+    console.log('- Request user firebaseUid:', req.user.firebaseUid);
+    
+    const userIdMatch = application.userId._id.toString() === req.user._id.toString();
+    const firebaseUidMatch = application.userId.firebaseUid === req.user.firebaseUid;
+    
+    console.log('- userIdMatch:', userIdMatch);
+    console.log('- firebaseUidMatch:', firebaseUidMatch);
+    
+    if (!userIdMatch && !firebaseUidMatch) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized access to this application',
@@ -57,8 +69,8 @@ router.post('/create-order', auth, async (req, res) => {
     const visaFee = application.visaType.fee.inr;
     const totalAmount = visaFee + Number(esimPrice);
 
-    // Create Razorpay order
-    const receipt = `visa_${applicationId}_${Date.now()}`;
+    // Create Razorpay order (receipt must be max 40 chars)
+    const receiptId = `${application.applicationNumber}_${Date.now()}`.substring(0, 40);
     const notes = {
       applicationId: applicationId.toString(),
       applicationNumber: application.applicationNumber,
@@ -70,7 +82,7 @@ router.post('/create-order', auth, async (req, res) => {
       totalAmount,
     };
 
-    const orderResult = await createOrder(totalAmount, 'INR', receipt, notes);
+    const orderResult = await createOrder(totalAmount, 'INR', receiptId, notes);
 
     if (!orderResult.success) {
       console.error('Order creation failed:', orderResult.error);
@@ -160,7 +172,7 @@ router.post('/verify', auth, async (req, res) => {
     const paymentDetails = paymentResult.payment;
 
     // Update application with payment details
-    const application = await Application.findById(applicationId);
+    const application = await Application.findById(applicationId).populate('userId');
 
     if (!application) {
       return res.status(404).json({
@@ -170,15 +182,14 @@ router.post('/verify', auth, async (req, res) => {
     }
 
     // Check if user owns this application
-    if (application.userId.toString() !== req.user.uid) {
-      const User = require('../models/User');
-      const user = await User.findOne({ firebaseUid: req.user.uid });
-      if (!user || application.userId.toString() !== user._id.toString()) {
-        return res.status(403).json({
-          success: false,
-          message: 'Unauthorized access to this application',
-        });
-      }
+    const userIdMatch = application.userId._id.toString() === req.user._id.toString();
+    const firebaseUidMatch = application.userId.firebaseUid === req.user.firebaseUid;
+    
+    if (!userIdMatch && !firebaseUidMatch) {
+      return res.status(403).json({
+        success: false,
+        message: 'Unauthorized access to this application',
+      });
     }
 
     // Update payment information
@@ -194,7 +205,7 @@ router.post('/verify', auth, async (req, res) => {
     };
 
     application.paymentStatus = 'completed';
-    application.status = 'under-review';
+    application.status = 'under_review';
 
     // Add eSIM data if provided
     if (esim) {

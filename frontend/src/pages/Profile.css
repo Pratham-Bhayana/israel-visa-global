@@ -401,6 +401,18 @@
   margin-top: 0.25rem;
 }
 
+.payment-info {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #28a745;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background: #d4edda;
+  border-radius: 6px;
+  border-left: 3px solid #28a745;
+}
+
 .status-badge {
   padding: 0.5rem 1.15rem;
   border-radius: 20px;

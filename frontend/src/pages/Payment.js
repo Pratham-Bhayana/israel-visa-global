@@ -182,12 +182,16 @@ const Payment = () => {
 
   // eSIM Plans Data (prices in INR)
   const esimPlans = [
-    { data: '10GB', price: 499, validity: '30 DAYS', type: 'limited' },
-    { data: 'UNLIMITED', price: 1020, validity: '3 DAYS', type: 'unlimited' },
-    { data: '5GB', price: 999, validity: '30 DAYS', type: 'limited' },
-    { data: '20GB', price: 1999, validity: '60 DAYS', type: 'limited' },
-    { data: 'UNLIMITED', price: 1530, validity: '5 DAYS', type: 'unlimited' },
-    { data: 'UNLIMITED', price: 2720, validity: '10 DAYS', type: 'unlimited' },
+    { data: '1GB', price: 499, validity: '5 DAYS', type: 'limited' },
+    { data: '3GB', price: 799, validity: '7 DAYS', type: 'limited' },
+    { data: '5GB', price: 1199, validity: '15 DAYS', type: 'limited' },
+    { data: '10GB', price: 1899, validity: '30 DAYS', type: 'limited' },
+    { data: '15GB', price: 2399, validity: '30 DAYS', type: 'limited' },
+    { data: '25GB', price: 3299, validity: '30 DAYS', type: 'limited' },
+    { data: 'UNLIMITED', price: 1199, validity: '3 DAYS', type: 'unlimited' },
+    { data: 'UNLIMITED', price: 1699, validity: '5 DAYS', type: 'unlimited' },
+    { data: 'UNLIMITED', price: 2199, validity: '7 DAYS', type: 'unlimited' },
+    { data: 'UNLIMITED', price: 2999, validity: '10 DAYS', type: 'unlimited' },
   ];
 
   // Show only first 2 plans initially
