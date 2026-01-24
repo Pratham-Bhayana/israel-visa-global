@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import WhatsAppFloat from './components/WhatsAppFloat';
 
 // Context
 import { AuthProvider } from './contexts/AuthContext';
@@ -67,6 +68,7 @@ function App() {
             </Suspense>
           </main>
           <Footer />
+          <WhatsAppFloat />
           <ToastContainer
             position="top-right"
             autoClose={3000}
