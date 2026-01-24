@@ -354,11 +354,13 @@
   border-radius: 14px;
   padding: 1.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
   transition: all 0.2s;
   border: 1px solid rgba(0, 56, 184, 0.06);
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+  clear: both;
 }
 
 .app-card:hover {
@@ -529,18 +531,22 @@
 
 /* Tracker Section */
 .tracker-section {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
   border-top: 2px solid #e9ecef;
+  clear: both;
+  position: relative;
+  z-index: 1;
 }
 
 .progress-bar-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   position: relative;
-  padding: 0.5rem 0;
+  padding: 1rem 0;
+  clear: both;
 }
 
 .progress-bar-container::before {
@@ -621,6 +627,11 @@
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  clear: both;
+  position: relative;
+  z-index: 1;
 }
 
 .remarks-box h4 {
@@ -654,7 +665,11 @@
   border-radius: 10px;
   padding: 1.25rem 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  clear: both;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-notes-box h4 {
@@ -698,7 +713,11 @@
   border: 2px dashed #0EA5E9;
   border-radius: 12px;
   padding: 1.5rem;
-  margin-top: 1.25rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  clear: both;
+  position: relative;
+  z-index: 1;
 }
 
 .document-upload-box h4 {
@@ -911,10 +930,19 @@
     grid-template-columns: repeat(5, 1fr);
     gap: 0.75rem 0.5rem;
     font-size: 0.7rem;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
   }
 
   .progress-bar-container::before {
     display: none;
+  }
+
+  .remarks-box,
+  .admin-notes-box,
+  .document-upload-box {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 }
 
@@ -951,6 +979,8 @@
     grid-template-columns: 1fr;
     gap: 1rem;
     max-width: 100%;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
   }
 
   .profile-card,
@@ -961,6 +991,14 @@
   .info-value {
     word-break: break-word;
     overflow-wrap: anywhere;
+  }
+
+  .remarks-box,
+  .admin-notes-box,
+  .document-upload-box {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.25rem;
   }
 
   .step-marker {
