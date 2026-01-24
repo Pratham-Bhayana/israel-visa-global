@@ -1,5 +1,5 @@
 # Netlify Configuration for React App
-# Updated: 2026-01-02 - Production API configured
+# Updated: 2026-01-24 - Production API configured with proper env handling
 
 [build]
   command = "npm run build"
@@ -8,6 +8,10 @@
 [build.environment]
   NODE_VERSION = "18"
   GENERATE_SOURCEMAP = "false"
+  REACT_APP_API_URL = "https://israel-visa-global-production.up.railway.app"
+
+# Runtime environment variables (injected at build time)
+[context.production.environment]
   REACT_APP_API_URL = "https://israel-visa-global-production.up.railway.app"
 
 [[redirects]]

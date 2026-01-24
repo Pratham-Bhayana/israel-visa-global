@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
 import './VisaTypes.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const VisaTypes = () => {
   const [activeTab, setActiveTab] = useState('Israel');
   const [visaTypes, setVisaTypes] = useState([]);
@@ -55,7 +57,7 @@ const VisaTypes = () => {
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       
       const response = await fetch(
-        `http://localhost:5000/api/visa-types/all?country=${activeTab}`,
+        `${API_URL}/api/visa-types/all?country=${activeTab}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -113,8 +115,8 @@ const VisaTypes = () => {
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       
       const url = isEditing
-        ? `http://localhost:5000/api/visa-types/${selectedVisa._id}`
-        : 'http://localhost:5000/api/visa-types';
+        ? `${API_URL}/api/visa-types/${selectedVisa._id}`
+        : `${API_URL}/api/visa-types`;
       
       const method = isEditing ? 'PUT' : 'POST';
       
@@ -175,7 +177,7 @@ const VisaTypes = () => {
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       
       const response = await fetch(
-        `http://localhost:5000/api/visa-types/${visaToDelete._id}`,
+        `${API_URL}/api/visa-types/${visaToDelete._id}`,
         {
           method: 'DELETE',
           headers: {
