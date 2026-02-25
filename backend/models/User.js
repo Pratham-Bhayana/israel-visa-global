@@ -5,8 +5,8 @@ const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
-      required: [true, 'Email is required'],
       unique: true,
+      sparse: true,
       lowercase: true,
       trim: true,
     },
@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
       sparse: true,
+      unique: true,
     },
     displayName: {
       type: String,

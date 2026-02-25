@@ -59,7 +59,7 @@ const Navbar = () => {
     >
       <div className="navbar-container container">
        <Link to="/" className="navbar-logo">
-       <img src="https://res.cloudinary.com/dl99np8d8/image/upload/v1768802348/Edited_logo_INDOISRAEl_r1q4he.png" alt="Logo" className="logo-image"/>
+       <img src="https://res.cloudinary.com/dlwn3lssr/image/upload/v1768806103/ISRAEL_VISA_IN_nhomyl.png" alt="Logo" className="logo-image"/>
       </Link>
         
 

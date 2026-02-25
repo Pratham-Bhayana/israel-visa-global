@@ -377,25 +377,48 @@ const ApplicationDetails = () => {
             </h2>
             <div className="documents-grid">
               {application.documents && Object.keys(application.documents).length > 0 ? (
-                Object.entries(application.documents).map(([key, url]) => (
-                  url && (
-                    <a
-                      key={key}
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="document-card"
-                    >
-                      <div className="document-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                          <polyline points="14 2 14 8 20 8"/>
-                        </svg>
+                Object.entries(application.documents).map(([key, value]) => {
+                  // Handle both single URL and array of URLs
+                  const urls = Array.isArray(value) ? value : (value ? [value] : []);
+                  
+                  if (urls.length === 0) return null;
+                  
+                  return (
+                    <div key={key} className="document-card-wrapper">
+                      <div className="document-header">
+                        <div className="document-icon">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                          </svg>
+                        </div>
+                        <span className="document-title">
+                          {key.split(/(?=[A-Z])/).join(' ').replace(/^./, str => str.toUpperCase())}
+                        </span>
+                        {urls.length > 1 && (
+                          <span className="document-count">{urls.length} files</span>
+                        )}
                       </div>
-                      <span>{key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
-                    </a>
-                  )
-                ))
+                      <div className="document-files">
+                        {urls.map((url, index) => (
+                          <a
+                            key={`${key}-${index}`}
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="document-file-link"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                              <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            {urls.length > 1 ? `File ${index + 1}` : 'View Document'}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })
               ) : (
                 <p className="no-documents">No documents uploaded</p>
               )}

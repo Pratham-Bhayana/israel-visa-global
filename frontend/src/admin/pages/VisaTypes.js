@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import ConfirmModal from '../components/ConfirmModal';
 import './VisaTypes.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const VisaTypes = () => {
   const [activeTab, setActiveTab] = useState('Israel');
   const [visaTypes, setVisaTypes] = useState([]);
@@ -55,7 +57,7 @@ const VisaTypes = () => {
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       
       const response = await fetch(
-        `http://localhost:5000/api/visa-types/all?country=${activeTab}`,
+        `${API_URL}/api/visa-types/all?country=${activeTab}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -105,6 +107,27 @@ const VisaTypes = () => {
     }));
   };
 
+  const addArrayItem = (field) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: [...prev[field], ''],
+    }));
+  };
+
+  const updateArrayItem = (field, index, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].map((item, i) => (i === index ? value : item)),
+    }));
+  };
+
+  const removeArrayItem = (field, index) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -113,8 +136,8 @@ const VisaTypes = () => {
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       
       const url = isEditing
-        ? `http://localhost:5000/api/visa-types/${selectedVisa._id}`
-        : 'http://localhost:5000/api/visa-types';
+        ? `${API_URL}/api/visa-types/${selectedVisa._id}`
+        : `${API_URL}/api/visa-types`;
       
       const method = isEditing ? 'PUT' : 'POST';
       
@@ -175,7 +198,7 @@ const VisaTypes = () => {
       const adminUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
       
       const response = await fetch(
-        `http://localhost:5000/api/visa-types/${visaToDelete._id}`,
+        `${API_URL}/api/visa-types/${visaToDelete._id}`,
         {
           method: 'DELETE',
           headers: {
@@ -591,25 +614,65 @@ const VisaTypes = () => {
               </div>
 
               <div className="form-group">
-                <label>Requirements (one per line)</label>
-                <textarea
-                  name="requirements"
-                  value={formData.requirements.join('\n')}
-                  onChange={(e) => handleArrayInput('requirements', e.target.value)}
-                  rows="4"
-                  placeholder="Valid passport&#10;Passport photo&#10;Travel itinerary"
-                />
+                <label>Requirements</label>
+                <div className="array-items-container">
+                  {formData.requirements.map((req, index) => (
+                    <div key={index} className="array-item">
+                      <input
+                        type="text"
+                        value={req}
+                        onChange={(e) => updateArrayItem('requirements', index, e.target.value)}
+                        placeholder="e.g., Valid passport"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeArrayItem('requirements', index)}
+                        className="remove-btn"
+                        title="Remove"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem('requirements')}
+                    className="add-item-btn"
+                  >
+                    + Add Requirement
+                  </button>
+                </div>
               </div>
 
               <div className="form-group">
-                <label>Features (one per line)</label>
-                <textarea
-                  name="features"
-                  value={formData.features.join('\n')}
-                  onChange={(e) => handleArrayInput('features', e.target.value)}
-                  rows="4"
-                  placeholder="Fast processing&#10;Multiple entries&#10;90-day validity"
-                />
+                <label>Features</label>
+                <div className="array-items-container">
+                  {formData.features.map((feature, index) => (
+                    <div key={index} className="array-item">
+                      <input
+                        type="text"
+                        value={feature}
+                        onChange={(e) => updateArrayItem('features', index, e.target.value)}
+                        placeholder="e.g., Fast processing"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeArrayItem('features', index)}
+                        className="remove-btn"
+                        title="Remove"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => addArrayItem('features')}
+                    className="add-item-btn"
+                  >
+                    + Add Feature
+                  </button>
+                </div>
               </div>
 
               <div className="form-row">

@@ -3,6 +3,9 @@
 .env.local
 .env.*.local
 
+# Razorpay API documentation (contains sensitive keys)
+RAZORPAY*.md
+
 # Dependencies
 node_modules/
 npm-debug.log*

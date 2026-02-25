@@ -337,6 +337,11 @@ const Profile = () => {
                         <span className="app-date">
                           Applied: {new Date(app.submittedAt || app.createdAt).toLocaleDateString()}
                         </span>
+                        {app.paymentStatus === 'completed' && app.payment?.amount && (
+                          <span className="payment-info">
+                            💳 Paid: ₹{app.payment.amount.toLocaleString('en-IN')}
+                          </span>
+                        )}
                       </div>
                       <span className={`status-badge ${getStatusColor(app.status)}`}>
                         {app.status.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}

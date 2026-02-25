@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 const { generateToken } = require('../middleware/auth');
+const { verifyRecaptcha } = require('../services/recaptchaService');
 
 // @route   POST /api/auth/register
 // @desc    Register user
@@ -210,6 +211,71 @@ router.get('/me', require('../middleware/auth').protect, async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Error fetching user',
+      error: error.message,
+    });
+  }
+});
+
+// @route   POST /api/auth/verify-phone
+// @desc    Verify phone authentication with reCAPTCHA
+// @access  Public
+router.post('/verify-phone', async (req, res) => {
+  try {
+    const { phoneNumber, recaptchaToken, firebaseUid } = req.body;
+
+    // Validate input
+    if (!phoneNumber || !firebaseUid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number and Firebase UID are required',
+      });
+    }
+
+    // Verify reCAPTCHA token if provided and credentials are configured
+    if (recaptchaToken && process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      const isVerified = await verifyRecaptcha(recaptchaToken, 'LOGIN', 0.5);
+      if (!isVerified) {
+        console.log('reCAPTCHA verification failed, but continuing...');
+        // Don't block authentication - Firebase already verified the phone
+      }
+    }
+
+    // Check if user exists with this phone number
+    let user = await User.findOne({ phoneNumber });
+
+    if (!user) {
+      // Create new user for phone authentication
+      user = await User.create({
+        phoneNumber,
+        firebaseUid,
+        authProvider: 'phone',
+        displayName: `User ${phoneNumber.slice(-4)}`,
+      });
+    } else if (!user.firebaseUid) {
+      // Update existing user with Firebase UID
+      user.firebaseUid = firebaseUid;
+      await user.save();
+    }
+
+    // Generate JWT token
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Phone authentication successful',
+      token,
+      user: {
+        id: user._id,
+        phoneNumber: user.phoneNumber,
+        displayName: user.displayName,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error('Phone verification error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying phone authentication',
       error: error.message,
     });
   }

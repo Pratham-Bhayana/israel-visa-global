@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 import './BlogsPage.css';
 
 const BlogsPage = () => {
@@ -32,7 +33,7 @@ const BlogsPage = () => {
         ...(filters.search && { search: filters.search }),
       });
 
-      const response = await axios.get(`http://localhost:5000/api/blogs?${params}`);
+      const response = await axios.get(`${API_ENDPOINTS.BLOGS}?${params}`);
 
       if (response.data.success) {
         setBlogs(response.data.blogs || []);

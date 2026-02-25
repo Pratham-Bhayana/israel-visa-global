@@ -93,8 +93,11 @@ class PassportOCRService {
    */
   async performOCR(file) {
     try {
+      // Convert file to base64
+      const base64Image = await this.fileToBase64(file);
+      
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('base64Image', base64Image);
       formData.append('apikey', OCR_API_KEY);
       formData.append('language', 'eng');
       formData.append('isOverlayRequired', 'false');
@@ -105,18 +108,30 @@ class PassportOCRService {
       const response = await axios.post(OCR_API_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        timeout: 30000 // 30 second timeout
       });
 
+      console.log('OCR API Response:', response.data);
+
       if (response.data.IsErroredOnProcessing) {
+        const errorMessage = response.data.ErrorMessage?.[0] || 'OCR processing failed';
+        console.error('OCR API Error:', errorMessage);
         return {
           success: false,
-          error: response.data.ErrorMessage?.[0] || 'OCR processing failed'
+          error: errorMessage
         };
       }
 
       const parsedText = response.data.ParsedResults?.[0]?.ParsedText || '';
       
+      if (!parsedText || parsedText.trim().length === 0) {
+        return {
+          success: false,
+          error: 'No text could be extracted from the image. Please ensure the image is clear and well-lit.'
+        };
+      }
+
       return {
         success: true,
         text: parsedText,
@@ -125,11 +140,53 @@ class PassportOCRService {
       };
 
     } catch (error) {
+      console.error('OCR API Call Error:', error);
+      
+      // Provide more specific error messages
+      if (error.code === 'ECONNABORTED') {
+        return {
+          success: false,
+          error: 'OCR request timed out. Please try again with a smaller or clearer image.'
+        };
+      }
+      
+      if (error.response) {
+        return {
+          success: false,
+          error: `OCR API Error: ${error.response.status} - ${error.response.statusText}`
+        };
+      }
+      
+      if (error.request) {
+        return {
+          success: false,
+          error: 'Unable to connect to OCR service. Please check your internet connection.'
+        };
+      }
+      
       return {
         success: false,
-        error: error.message
+        error: error.message || 'An unexpected error occurred during OCR processing'
       };
     }
+  }
+
+  /**
+   * Convert file to base64 string
+   */
+  fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      // Validate that file is a Blob/File
+      if (!(file instanceof Blob) && !(file instanceof File)) {
+        reject(new Error('Invalid file type. Expected File or Blob object.'));
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
   }
 
   /**

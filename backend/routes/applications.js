@@ -218,7 +218,8 @@ router.post('/:id/payment', protect, async (req, res) => {
 // @access  Private
 router.get('/:id', protect, async (req, res) => {
   try {
-    const application = await Application.findById(req.params.id);
+    const application = await Application.findById(req.params.id)
+      .populate('visaType', 'name category');
 
     if (!application) {
       return res.status(404).json({
