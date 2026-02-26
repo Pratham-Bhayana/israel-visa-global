@@ -1,10 +1,29 @@
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
 
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
+let razorpay = null;
+
+const getRazorpayInstance = () => {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+
+  if (!keyId || !keySecret) {
+    return null;
+  }
+
+  if (!razorpay) {
+    razorpay = new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret,
+    });
+  }
+
+  return razorpay;
+};
+
+const getConfigError = () => ({
+  success: false,
+  error: 'Razorpay is not configured. Please set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET.',
 });
 
 /**
@@ -17,6 +36,11 @@ const razorpay = new Razorpay({
  */
 const createOrder = async (amount, currency = 'INR', receipt, notes = {}) => {
   try {
+    const razorpayInstance = getRazorpayInstance();
+    if (!razorpayInstance) {
+      return getConfigError();
+    }
+
     const options = {
       amount: Math.round(amount * 100), // Convert to paise and ensure integer
       currency,
@@ -25,7 +49,7 @@ const createOrder = async (amount, currency = 'INR', receipt, notes = {}) => {
       payment_capture: 1, // Auto capture payment
     };
 
-    const order = await razorpay.orders.create(options);
+    const order = await razorpayInstance.orders.create(options);
     return { success: true, order };
   } catch (error) {
     console.error('Razorpay Order Creation Error:', error);
@@ -46,6 +70,10 @@ const createOrder = async (amount, currency = 'INR', receipt, notes = {}) => {
  */
 const verifyPaymentSignature = (orderId, paymentId, signature) => {
   try {
+    if (!process.env.RAZORPAY_KEY_SECRET) {
+      return false;
+    }
+
     const generatedSignature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
       .update(`${orderId}|${paymentId}`)
@@ -65,7 +93,12 @@ const verifyPaymentSignature = (orderId, paymentId, signature) => {
  */
 const fetchPayment = async (paymentId) => {
   try {
-    const payment = await razorpay.payments.fetch(paymentId);
+    const razorpayInstance = getRazorpayInstance();
+    if (!razorpayInstance) {
+      return getConfigError();
+    }
+
+    const payment = await razorpayInstance.payments.fetch(paymentId);
     return { success: true, payment };
   } catch (error) {
     console.error('Razorpay Fetch Payment Error:', error);
@@ -84,7 +117,12 @@ const fetchPayment = async (paymentId) => {
  */
 const fetchOrder = async (orderId) => {
   try {
-    const order = await razorpay.orders.fetch(orderId);
+    const razorpayInstance = getRazorpayInstance();
+    if (!razorpayInstance) {
+      return getConfigError();
+    }
+
+    const order = await razorpayInstance.orders.fetch(orderId);
     return { success: true, order };
   } catch (error) {
     console.error('Razorpay Fetch Order Error:', error);
@@ -104,8 +142,13 @@ const fetchOrder = async (orderId) => {
  */
 const refundPayment = async (paymentId, amount = null) => {
   try {
+    const razorpayInstance = getRazorpayInstance();
+    if (!razorpayInstance) {
+      return getConfigError();
+    }
+
     const refundOptions = amount ? { amount: Math.round(amount * 100) } : {};
-    const refund = await razorpay.payments.refund(paymentId, refundOptions);
+    const refund = await razorpayInstance.payments.refund(paymentId, refundOptions);
     return { success: true, refund };
   } catch (error) {
     console.error('Razorpay Refund Error:', error);

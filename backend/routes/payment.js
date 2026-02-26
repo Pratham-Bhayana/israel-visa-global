@@ -86,7 +86,8 @@ router.post('/create-order', auth, async (req, res) => {
 
     if (!orderResult.success) {
       console.error('Order creation failed:', orderResult.error);
-      return res.status(500).json({
+      const statusCode = orderResult.error?.includes('not configured') ? 503 : 500;
+      return res.status(statusCode).json({
         success: false,
         message: 'Failed to create payment order',
         error: orderResult.error,
@@ -163,9 +164,11 @@ router.post('/verify', auth, async (req, res) => {
     const paymentResult = await fetchPayment(razorpay_payment_id);
 
     if (!paymentResult.success) {
-      return res.status(500).json({
+      const statusCode = paymentResult.error?.includes('not configured') ? 503 : 500;
+      return res.status(statusCode).json({
         success: false,
         message: 'Failed to fetch payment details',
+        error: paymentResult.error,
       });
     }
 

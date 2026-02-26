@@ -80,10 +80,7 @@ app.set('io', io);
 
 // Database connection
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected Successfully'))
   .catch((err) => {
     console.error('❌ MongoDB Connection Error:', err.message);
@@ -151,11 +148,36 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
-  console.log(`📡 Socket.io enabled`);
+const BASE_PORT = Number(process.env.PORT) || 5000;
+const MAX_PORT_RETRIES = 10;
+let activePort = BASE_PORT;
+
+const startServer = () => {
+  server.listen(activePort, () => {
+    console.log(`🚀 Server running on port ${activePort}`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+    console.log(`📡 Socket.io enabled`);
+  });
+};
+
+server.on('error', (error) => {
+  if (error.code === 'EADDRINUSE') {
+    const nextPort = activePort + 1;
+
+    if (nextPort > BASE_PORT + MAX_PORT_RETRIES) {
+      console.error(`❌ Ports ${BASE_PORT}-${BASE_PORT + MAX_PORT_RETRIES} are all in use. Please free a port or set PORT.`);
+      process.exit(1);
+    }
+
+    console.warn(`⚠️ Port ${activePort} is in use. Retrying on port ${nextPort}...`);
+    activePort = nextPort;
+    setTimeout(startServer, 200);
+    return;
+  }
+
+  throw error;
 });
+
+startServer();
 
 module.exports = { app, io };

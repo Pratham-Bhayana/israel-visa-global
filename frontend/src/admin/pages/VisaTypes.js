@@ -99,14 +99,6 @@ const VisaTypes = () => {
     }
   };
 
-  const handleArrayInput = (field, value) => {
-    const items = value.split('\n').filter(item => item.trim());
-    setFormData(prev => ({
-      ...prev,
-      [field]: items,
-    }));
-  };
-
   const addArrayItem = (field) => {
     setFormData(prev => ({
       ...prev,

@@ -38,6 +38,39 @@ const Application = () => {
   const [showEligibilityModal, setShowEligibilityModal] = React.useState(false);
   const [showExpiryWarningModal, setShowExpiryWarningModal] = React.useState(false);
   const [expiryWarning, setExpiryWarning] = React.useState({ isExpired: false, daysUntilExpiry: 0 });
+
+  const getApiBaseUrls = React.useCallback(() => {
+    const configuredUrl = process.env.REACT_APP_API_URL;
+    if (configuredUrl) {
+      return [configuredUrl.replace(/\/$/, '')];
+    }
+
+    const host = window.location.hostname || 'localhost';
+    return [
+      `http://${host}:5000`,
+      `http://${host}:5001`,
+    ];
+  }, []);
+
+  const fetchVisaTypesByCountry = React.useCallback(async (country) => {
+    let lastError = null;
+
+    for (const baseUrl of getApiBaseUrls()) {
+      try {
+        const response = await axios.get(`${baseUrl}/api/visa-types`, {
+          params: { country },
+        });
+
+        if (response.data?.success) {
+          return response.data.data || [];
+        }
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError || new Error('Failed to fetch visa types');
+  }, [getApiBaseUrls]);
   
   // Check for e-visa eligibility data on load
   React.useEffect(() => {
@@ -210,27 +243,23 @@ supportingDocuments: [],
   React.useEffect(() => {
     const fetchVisaTypes = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/visa-types?country=Israel`);
-        if (response.data.success) {
-          setVisaTypes(response.data.data);
-        }
+        const data = await fetchVisaTypesByCountry('Israel');
+        setVisaTypes(data);
       } catch (error) {
         console.error('Error fetching visa types:', error);
         toast.error('Failed to load visa types');
       }
     };
     fetchVisaTypes();
-  }, []);
+  }, [fetchVisaTypesByCountry]);
 
   // Fetch India visa types when India is selected
   React.useEffect(() => {
     if (countrySelection === 'india') {
       const fetchIndiaVisaTypes = async () => {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}/api/visa-types?country=India`);
-          if (response.data.success) {
-            setIndiaVisaTypes(response.data.data);
-          }
+          const data = await fetchVisaTypesByCountry('India');
+          setIndiaVisaTypes(data);
         } catch (error) {
           console.error('Error fetching India visa types:', error);
           toast.error('Failed to load India visa types');
@@ -238,7 +267,7 @@ supportingDocuments: [],
       };
       fetchIndiaVisaTypes();
     }
-  }, [countrySelection]);
+  }, [countrySelection, fetchVisaTypesByCountry]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
