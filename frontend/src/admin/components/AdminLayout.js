@@ -70,16 +70,16 @@ const AdminLayout = () => {
       ),
       label: 'Users',
     },
-    {
-      path: '/admin/esims',
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-          <line x1="12" y1="20" x2="12" y2="20.01"/>
-        </svg>
-      ),
-      label: 'eSIM Orders',
-    },
+    // {
+    //   path: '/admin/esims',
+    //   icon: (
+    //     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    //       <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+    //       <line x1="12" y1="20" x2="12" y2="20.01"/>
+    //     </svg>
+    //   ),
+    //   label: 'eSIM Orders',
+    // },
     {
       path: '/admin/payments',
       icon: (
