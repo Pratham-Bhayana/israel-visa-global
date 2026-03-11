@@ -36,16 +36,38 @@
 }
 
 .logo-icon {
-  width: 40px;
+  width: 230px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  background: linear-gradient(135deg, #0038B8 0%, #0052E0 100%);
   flex-shrink: 0;
 }
+.logo-image{
+  width: 100%;
+  
+}
+.sidebar-logo.open .logo-icon {
+  z-index: 1;
+  width: 230px;
+}
 
+/* sidebar close */
+.sidebar-logo.closed .logo-icon {
+  z-index: 10;
+  width: 40px;   
+}
+
+.sidebar-logo.open .logo-image {
+  opacity: 1;
+  
+}
+
+.sidebar-logo.closed .logo-image {
+  opacity: 0.3;   
+ 
+}
 .sidebar-nav {
   flex: 1;
   padding: 1.5rem 1rem;

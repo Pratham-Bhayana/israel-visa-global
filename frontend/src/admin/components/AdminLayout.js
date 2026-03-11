@@ -110,20 +110,12 @@ const AdminLayout = () => {
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
         <div className="sidebar-header">
-          <div className="sidebar-logo">
+           <div className={`sidebar-logo ${isSidebarOpen ? "open" : "closed"}`}>
             <div className="logo-icon">
-              {/* <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" fill="url(#sidebarGradient)"/>
-                <defs>
-                  <linearGradient id="sidebarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#0038B8"/>
-                    <stop offset="100%" stopColor="#0052E0"/>
-                  </linearGradient>
-                </defs>
-              </svg> */}/
+             
               <img src="https://res.cloudinary.com/dl99np8d8/image/upload/v1768802348/Edited_logo_INDOISRAEl_r1q4he.png" alt="Logo" className="logo-image" />
             </div>
-            {/* {isSidebarOpen && <span>Israel Visa Global</span>} */}
+            {isSidebarOpen && <span></span>}
           </div>
         </div>
 
