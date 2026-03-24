@@ -76,13 +76,13 @@ const BlogsPage = () => {
           content="Read our comprehensive Israel visa blog for application guides, requirements, tips, and the latest visa news. Everything you need for a successful Israel visa application."
         />
         <meta name="keywords" content="Israel visa blog, visa guide, Israel visa requirements, visa application tips, Israel travel blog" />
-        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`} />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}/blogs`} />
         
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Israel Visa Blog - Complete Guide & Travel Tips" />
         <meta property="og:description" content="Read our comprehensive Israel visa blog for application guides, requirements, tips, and news." />
-        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`} />
+        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}/blogs`} />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary" />
@@ -99,13 +99,13 @@ const BlogsPage = () => {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}`
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Blog",
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}/blogs`
               }
             ]
           })}

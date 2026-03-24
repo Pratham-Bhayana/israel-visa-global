@@ -106,14 +106,14 @@ const BlogPost = () => {
         <title>{blog.metaTitle}</title>
         <meta name="description" content={blog.metaDescription} />
         <meta name="keywords" content={blog.keywords.join(', ')} />
-        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`} />
+        <link rel="canonical" href={`${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}/blogs/${blog.slug}`} />
         
         {/* Open Graph */}
         <meta property="og:title" content={blog.metaTitle} />
         <meta property="og:description" content={blog.metaDescription} />
         {blog.featuredImage?.url && <meta property="og:image" content={blog.featuredImage.url} />}
         <meta property="og:type" content="article" />
-        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`} />
+        <meta property="og:url" content={`${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}/blogs/${blog.slug}`} />
         <meta property="article:published_time" content={blog.publishedAt || blog.createdAt} />
         <meta property="article:modified_time" content={blog.updatedAt || blog.createdAt} />
         <meta property="article:author" content={blog.author || "Israel Visa Portal"} />
@@ -138,19 +138,19 @@ const BlogPost = () => {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}`
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Blog",
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs`
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com'}/blogs`
               },
               {
                 "@type": "ListItem",
                 "position": 3,
                 "name": blog.title,
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com'}/blogs/${blog.slug}`
               }
             ]
           })}
@@ -175,12 +175,12 @@ const BlogPost = () => {
               "name": "Israel Visa Application Portal",
               "logo": {
                 "@type": "ImageObject",
-                "url": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/logo.png`
+                "url": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com'}/logo.png`
               }
             },
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/blogs/${blog.slug}`
+              "@id": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com'}/blogs/${blog.slug}`
             }
           })}
         </script>

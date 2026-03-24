@@ -865,14 +865,14 @@ supportingDocuments: [],
               {
                 "@type": "ListItem",
                 "position": 1,
-                "name": "Home",
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}`
+                "name": "Home - India to Israel travel",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com/'}`
               },
               {
                 "@type": "ListItem",
                 "position": 2,
-                "name": "Apply for Visa",
-                "item": `${process.env.REACT_APP_SITE_URL || 'https://yourdomain.com'}/application`
+                "name": "Apply for Israel e-visa",
+                "item": `${process.env.REACT_APP_SITE_URL || 'https://indoisraelvisa.com'}/application`
               }
             ]
           })}
